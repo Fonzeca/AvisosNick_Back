@@ -13,7 +13,6 @@ import com.mongodb.MongoClientURI;
 @Repository
 public class Prueba {
 	
-	@PostConstruct
 	public void init() {
 		final MongoClientURI uri = new MongoClientURI("mongodb://root:Ale159159!@vps-1791261-x.dattaweb.com:27017");
 		
