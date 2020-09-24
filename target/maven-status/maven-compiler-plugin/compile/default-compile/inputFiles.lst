@@ -1,5 +1,8 @@
 C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\persistence\Book.java
+C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\managers\CloudMessagingManager.java
 C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\security\SecurityConfig.java
 C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\controllers\LogInController.java
 C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\persistence\Prueba.java
+C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\security\JWTAuthorizationFilter.java
+C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\controllers\CloudMessagingController.java
 C:\Users\Daiko\Documents\GitHub\AvisosNick_Back\src\main\java\com\mindia\avisosnick\Main.java

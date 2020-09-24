@@ -1,9 +1,17 @@
 package com.mindia.avisosnick.controllers;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -26,6 +34,26 @@ public class CloudMessagingController {
 		} catch (FirebaseMessagingException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@PostConstruct
+	private void firebaseLogIn() {
+		try {
+			System.out.println(System.getProperty("user.dir"));
+			FileInputStream serviceAccount =
+					  new FileInputStream("src/main/resources/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
+			
+					FirebaseOptions options = FirebaseOptions.builder()
+					  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+					  .setDatabaseUrl("https://avisosnick.firebaseio.com")
+					  .build();
+
+					FirebaseApp.initializeApp(options);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 	}
 
@@ -40,5 +68,4 @@ public class CloudMessagingController {
 		// [END android_message]
 		return message;
 	}
-
 }

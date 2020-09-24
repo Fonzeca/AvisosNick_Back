@@ -9,12 +9,12 @@ import com.mindia.avisosnick.security.SecurityConfig;
 
 @RestController
 public class LogInController {
-	
+
 	@GetMapping("/holis")
 	public String Prueba() {
 		return "Heello";
 	}
-	
+
 	@PostMapping("/login")
 	public String LogIn(@RequestParam("user") String username, @RequestParam("password") String pwd) {
 		String token = SecurityConfig.getJWTToken(username);
