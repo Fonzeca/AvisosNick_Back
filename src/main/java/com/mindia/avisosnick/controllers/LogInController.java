@@ -20,4 +20,9 @@ public class LogInController {
 		String token = SecurityConfig.getJWTToken(username);
 		return token;
 	}
+	
+	@PostMapping("/register")
+	public void SignUp(@RequestParam("username") String username, @RequestParam("password") String password) {
+		
+	}
 }
