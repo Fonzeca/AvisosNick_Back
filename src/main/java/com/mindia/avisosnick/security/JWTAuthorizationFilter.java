@@ -43,6 +43,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			filterChain.doFilter(request, response);
 			
 		} catch (Exception e) {
+			System.out.println("Catcheado pingback op 1 link");
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 			return;
