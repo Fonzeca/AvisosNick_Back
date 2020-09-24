@@ -1,0 +1,5 @@
+com\mindia\avisosnick\persistence\Book.class
+com\mindia\avisosnick\Main.class
+com\mindia\avisosnick\controllers\LogInController.class
+com\mindia\avisosnick\persistence\Prueba.class
+com\mindia\avisosnick\security\SecurityConfig.class
