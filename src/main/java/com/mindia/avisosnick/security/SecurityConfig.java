@@ -1,30 +1,55 @@
 package com.mindia.avisosnick.security;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	private static int secondsUntilExpires = 3600;
+	public static String secretKey = "huffm4an123";
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().
-			anyRequest().
-			authenticated().
-			and().
-			oauth2Login()
-			.authorizationEndpoint()
-			.baseUri("/oauth2/autorize-client")
-			.authorizationRequestRepository(authorizationRequestRepository());
+		http.csrf().disable()
+		.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+		.authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.anyRequest().authenticated();
 	}
-	
-	@Bean
-	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
-	    return new HttpSessionOAuth2AuthorizationRequestRepository();
+
+
+	public static String getJWTToken(String username) {
+		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+				.commaSeparatedStringToAuthorityList("ROLE_USER");
+		
+		String token = Jwts
+				.builder()
+				.setId("mindiaJWT")
+				.setSubject(username)
+				.claim("authorities",
+						grantedAuthorities.stream()
+								.map(GrantedAuthority::getAuthority)
+								.collect(Collectors.toList()))
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + (secondsUntilExpires * 1000)))
+				.signWith(SignatureAlgorithm.HS512,
+						secretKey.getBytes()).compact();
+
+		return token;
 	}
 }
