@@ -40,7 +40,6 @@ public class CloudMessagingController {
 	@PostConstruct
 	private void firebaseLogIn() {
 		try {
-			System.out.println(System.getProperty("user.dir"));
 			FileInputStream serviceAccount = new FileInputStream(
 					"src/main/resources/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
 
@@ -50,7 +49,6 @@ public class CloudMessagingController {
 
 			FirebaseApp.initializeApp(options);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

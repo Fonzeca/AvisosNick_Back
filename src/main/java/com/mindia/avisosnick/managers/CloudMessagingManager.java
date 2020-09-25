@@ -28,9 +28,8 @@ public class CloudMessagingManager {
 	private Message androidMessage(String token) {
 		// [START android_message]
 		Message message = Message.builder()
-				//.putData("Sender", "Daiko'")
-				.setAndroidConfig(AndroidConfig.builder().setTtl(3600 * 1000) // 1 hour in
-																											// milliseconds
+				//.putData("key", "data'")
+				.setAndroidConfig(AndroidConfig.builder().setTtl(3600 * 1000 * 24 * 7) // 1 week in milliseconds
 				.setPriority(AndroidConfig.Priority.NORMAL)
 				.setNotification(AndroidNotification.builder().setTitle("Test Message using Eclipse.")
 						.setBody("This is a test message created on AvisosNick by Daiko'.").build())
