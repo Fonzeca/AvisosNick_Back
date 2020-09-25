@@ -24,5 +24,7 @@ public class LogInController {
 	@PostMapping("/register")
 	public void SignUp(@RequestParam("username") String username, @RequestParam("password") String password) {
 		
+		
+		
 	}
 }

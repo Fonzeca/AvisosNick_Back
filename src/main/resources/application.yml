@@ -1,0 +1,9 @@
+database:
+    mongo:
+        user: usrNick
+        password: huffm4n123
+        ip: vps-1791261-x.dattaweb.com
+        port: 27017
+        db: AvisosNick
+server:
+    port: 45589

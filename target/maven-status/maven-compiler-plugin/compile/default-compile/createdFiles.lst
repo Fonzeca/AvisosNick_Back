@@ -1,8 +1,0 @@
-com\mindia\avisosnick\persistence\Book.class
-com\mindia\avisosnick\Main.class
-com\mindia\avisosnick\controllers\LogInController.class
-com\mindia\avisosnick\security\SecurityConfig.class
-com\mindia\avisosnick\controllers\CloudMessagingController.class
-com\mindia\avisosnick\managers\CloudMessagingManager.class
-com\mindia\avisosnick\security\JWTAuthorizationFilter.class
-com\mindia\avisosnick\persistence\Prueba.class
