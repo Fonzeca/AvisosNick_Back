@@ -1,22 +1,55 @@
 package com.mindia.avisosnick.persistence;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-
-
-
-@ConfigurationProperties("database.mongo")
+@Component
+@ConfigurationProperties(prefix = "database.mongo")
 public class MongoDbProperties {
-	public String user;
-	public String password;
-	public String ip;
-	public String port;
+	private String user;
+	private String password;
+	private String ip;
+	private String port;
 	
-	public String db;
+	private String db;
 	
-	public MongoClient getUri() {
-		return MongoClients.create("mongodb://" + user + ":" + password + "@" + ip + ":" + port);
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
+	}
+
+	public String getDb() {
+		return db;
+	}
+
+	public void setDb(String db) {
+		this.db = db;
 	}
 }

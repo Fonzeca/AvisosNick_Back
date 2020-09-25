@@ -3,6 +3,7 @@ package com.mindia.avisosnick.view;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,26 +13,26 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "username",
+    "email",
     "password"
 })
 public class VUser {
 
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("email")
+    private String email;
     @JsonProperty("password")
     private String password;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("username")
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     @JsonProperty("username")
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonProperty("password")

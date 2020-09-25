@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @EnableWebSecurity
+@EnableConfigurationProperties
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
@@ -36,14 +38,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 
-	public static String getJWTToken(String username) {
+	public static String getJWTToken(String email) {
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList("ROLE_USER");
 		
 		String token = Jwts
 				.builder()
 				.setId("mindiaJWT")
-				.setSubject(username)
+				.setSubject(email)
 				.claim("authorities",
 						grantedAuthorities.stream()
 								.map(GrantedAuthority::getAuthority)

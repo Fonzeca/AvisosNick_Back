@@ -16,14 +16,13 @@ public class LogInController {
 	}
 
 	@PostMapping("/login")
-	public String LogIn(@RequestParam("user") String username, @RequestParam("password") String pwd) {
-		String token = SecurityConfig.getJWTToken(username);
+	public String LogIn(@RequestParam("email") String email, @RequestParam("password") String pwd) {
+		String token = SecurityConfig.getJWTToken(email);
 		return token;
 	}
 	
 	@PostMapping("/register")
-	public void SignUp(@RequestParam("username") String username, @RequestParam("password") String password) {
-		
+	public void SignUp(@RequestParam("email") String email, @RequestParam("password") String password) {
 		
 		
 	}
