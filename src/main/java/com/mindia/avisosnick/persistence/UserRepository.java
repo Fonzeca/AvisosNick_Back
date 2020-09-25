@@ -11,12 +11,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.mindia.avisosnick.persistence.model.User;
+import com.mongodb.client.MongoClients;
 
 @Repository
 public class UserRepository {
 	
-	@Autowired
-	private MongoDbProperties mongoProperties;
+//	@Autowired
+//	private MongoDbProperties mongoProperties;
 	
 	private MongoOperations mongoOps;
 	
@@ -25,7 +26,7 @@ public class UserRepository {
 	private void init() {
 		
 		//TODO: hacer la conexion en otra clase
-		mongoOps = new MongoTemplate(mongoProperties.getUri(), mongoProperties.db);
+		mongoOps = new MongoTemplate(MongoClients.create("mongodb://usrNick:huffm4n123@vps-1791261-x.dattaweb.com:27017"), "AvisosNick");
 		
 //	    mongoOps.insert(new Person("Joe", 34));
 	}
