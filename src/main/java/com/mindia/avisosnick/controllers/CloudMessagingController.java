@@ -27,7 +27,7 @@ public class CloudMessagingController {
 	@Autowired
 	CloudMessagingManager manager;
 
-	@PostMapping("/newMessage")
+	@PostMapping("/newNotice")
 	public void sendToToken(
 	// @RequestParam String token
 	) {
@@ -36,16 +36,23 @@ public class CloudMessagingController {
 		// Token Fonzo
 //		String token = "cyPz04QpSqK96YtIn785cE:APA91bFegLKBzmktuQ3UqHSGLV129A5prEDxW27FD4YJllK9AsAABRMPbaKKz6kvtllQWulRKB2ZkRRuyUQc8AufAkeDW5N94gGpbiEkN7Hdn_m9O-A3ikkbP2-7iLzcaOz_uXEIWN2N";
 
-		manager.sendMessage(token);
+		manager.sendNotice(token);
 	}
 	
-	@PostMapping("/multipleMessages")
+	@PostMapping("/multipleNotice")
 	public void sendMultiple() {
 		//Up to 500 tokens
 		List<String> tokens= Arrays.asList(
 				"dOZv-2maRrW0sFj_c0JdLu:APA91bE_wbWHlZ6yjLlwzyhWiGXwgyNWjJCGnzaPOL56S3iWY1K3yLyL93MGhYtctCCdt4yMT-s2C2UKiTf57sRNpE3_-UMKzdiVZ7MrFaBR-1wCQoibE2HSn3jVYH_v8JOlw8PH2xU9",
 				"cyPz04QpSqK96YtIn785cE:APA91bFegLKBzmktuQ3UqHSGLV129A5prEDxW27FD4YJllK9AsAABRMPbaKKz6kvtllQWulRKB2ZkRRuyUQc8AufAkeDW5N94gGpbiEkN7Hdn_m9O-A3ikkbP2-7iLzcaOz_uXEIWN2N");
-	manager.sendMultipleMessages(tokens);
+	manager.sendMultipleNotices(tokens);
+	}
+	
+	@PostMapping("/readNotice")
+	public void markNoticeAsRead() {
+		//TODO: completar mail e id
+		String mail="", idNotice = "";
+		manager.markAsRead(mail, idNotice);
 	}
 
 	@PostConstruct

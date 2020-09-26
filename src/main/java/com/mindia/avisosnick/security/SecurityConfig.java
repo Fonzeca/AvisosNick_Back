@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//TODO: mejorar mappings de coso xD
 		.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers(HttpMethod.POST, "/newMessage").permitAll()
+		.antMatchers(HttpMethod.POST, "/multipleMessages").permitAll()
 		.anyRequest().authenticated();
 	}
 

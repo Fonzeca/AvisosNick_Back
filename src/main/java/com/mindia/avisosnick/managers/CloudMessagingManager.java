@@ -15,8 +15,8 @@ import com.google.firebase.messaging.MulticastMessage;
 @Service
 public class CloudMessagingManager {
 
-	public void sendMultipleMessages(List<String> tokens) {
-		MulticastMessage message = MulticastMessage.builder().setAndroidConfig(AndroidConfig.builder().setTtl(3600 * 1000 * 24 * 7) // 1 week in milliseconds
+	public void sendMultipleNotices(List<String> tokens) {
+		MulticastMessage notice = MulticastMessage.builder().setAndroidConfig(AndroidConfig.builder().setTtl(3600 * 1000 * 24 * 7) // 1 week in milliseconds
 				.setPriority(AndroidConfig.Priority.NORMAL)
 				.setNotification(AndroidNotification.builder().setTitle("Test Multimessage using Eclipse.")
 						.setBody("This is a test message created on AvisosNick by Daiko'.").build())
@@ -24,7 +24,7 @@ public class CloudMessagingManager {
 				.addAllTokens(tokens).build();
 		BatchResponse response;
 		try {
-			response = FirebaseMessaging.getInstance().sendMulticast(message);
+			response = FirebaseMessaging.getInstance().sendMulticast(notice);
 			// See the BatchResponse reference documentation
 			// for the contents of response.
 			System.out.println(response.getSuccessCount() + " messages were sent successfully");
@@ -35,7 +35,7 @@ public class CloudMessagingManager {
 
 	}
 
-	public void sendMessage(String token) {
+	public void sendNotice(String token) {
 		// Send a message to the device corresponding to the provided
 		// registration token.
 		String response;
@@ -61,6 +61,11 @@ public class CloudMessagingManager {
 				.setToken(token).build();
 		// [END android_message]
 		return message;
+	}
+
+	public void markAsRead(String mail, String idNotice) {
+		
+		
 	}
 
 }
