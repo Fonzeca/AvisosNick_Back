@@ -15,10 +15,17 @@ public class UserRepository {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
+	public void createUser(User user) {
+		try {
+			mongoTemplate.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
-	public User getUserByUserName(String userName) {
-		Query query = new Query(where("username").is(userName));
+	public User getUserByEmail(String email) {
+		Query query = new Query(where("email").is(email));
 		
 		User user = mongoTemplate.findOne(query, User.class);
 		return user;
