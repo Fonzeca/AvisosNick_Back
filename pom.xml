@@ -43,17 +43,12 @@
 			<version>7.0.0</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb -->
 		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>3.12.7</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-		</dependency>
 
 		<!-- API, java.xml.bind module -->
 		<dependency>
