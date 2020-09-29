@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -17,6 +18,7 @@ import com.google.firebase.FirebaseOptions;
 import com.mindia.avisosnick.managers.CloudMessagingManager;
 
 @RestController
+@RequestMapping("/notice")
 public class CloudMessagingController {
 	@Autowired
 	CloudMessagingManager manager;
