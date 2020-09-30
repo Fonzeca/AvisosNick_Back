@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,20 +26,19 @@ public class NoticeController {
 	NoticeManager manager;
 
 	@PostMapping("/create")
-	public void createNotice(@RequestParam List<String> tokens, @RequestParam boolean send, @RequestParam String title,
+	public void createNotice(@RequestParam List<String> mails, @RequestParam boolean send, @RequestParam String title,
 			@RequestParam String description, @RequestParam User author) {
 		
-		manager.createNotice(tokens, send, title, description, author);
+		manager.createNotice(mails, send, title, description, author);
 	}
 	
-//				"dOZv-2maRrW0sFj_c0JdLu:APA91bE_wbWHlZ6yjLlwzyhWiGXwgyNWjJCGnzaPOL56S3iWY1K3yLyL93MGhYtctCCdt4yMT-s2C2UKiTf57sRNpE3_-UMKzdiVZ7MrFaBR-1wCQoibE2HSn3jVYH_v8JOlw8PH2xU9",
-//				"cyPz04QpSqK96YtIn785cE:APA91bFegLKBzmktuQ3UqHSGLV129A5prEDxW27FD4YJllK9AsAABRMPbaKKz6kvtllQWulRKB2ZkRRuyUQc8AufAkeDW5N94gGpbiEkN7Hdn_m9O-A3ikkbP2-7iLzcaOz_uXEIWN2N");
-	
 	@PostMapping("/markReaded")
-	public void markNoticeAsRead() {
-		//TODO: completar mail e id
-		String mail="", idNotice = "";
+	public void markNoticeAsRead(@RequestParam String mail, @RequestParam ObjectId idNotice) {
 		manager.markAsRead(mail, idNotice);
+	}
+	@PostMapping("/deactivate")
+	public void deactivateNotice(@RequestParam ObjectId noticeId) {
+		manager.deactivate(noticeId);
 	}
 
 	@PostConstruct

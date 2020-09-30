@@ -3,6 +3,7 @@ package com.mindia.avisosnick.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +12,8 @@ import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.BatchResponse;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
+import com.mindia.avisosnick.persistence.NoticeRepository;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
 
@@ -20,47 +21,18 @@ import com.mindia.avisosnick.persistence.model.User;
 public class NoticeManager {
 	@Autowired
 	UserManager uManager;
+	
+	@Autowired
+	NoticeRepository nRepo;
+	
 	final private int DAYINMILLISECONDS = 86400000;// 3600 seconds * 1000 to milli * 24 hours
-
-
-	public void sendNotice(String token) {
-		// Send a message to the device corresponding to the provided
-		// registration token.
-		String response;
-
-		try {
-			response = FirebaseMessaging.getInstance().send(androidMessage(token));
-			// Response is a message ID string.
-			System.out.println("Successfully sent message: " + response);
-		} catch (FirebaseMessagingException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Message androidMessage(String token) {
-		// [START android_message]
-		Message message = Message.builder()
-				// .putData("key", "data'")
-				.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
-						.setPriority(AndroidConfig.Priority.NORMAL)
-						.setNotification(AndroidNotification.builder().setTitle("Test Message using Eclipse.")
-								.setBody("This is a test message created on AvisosNick by Daiko'.").build())
-						.build())
-				.setToken(token).build();
-		// [END android_message]
-		return message;
-	}
-
-	public void markAsRead(String mail, String idNotice) {
-
-	}
 
 	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
 		Notice notice = new Notice(title, description, author, mails);
-		// TODO: agregar a base de datos?
+		nRepo.createNotice(notice);
 		if (send) {
-			List<User> usersToSend= uManager.getAllUsersByEmails(mails);
-			List<String> tokens= new ArrayList<String>();
+			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
+			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
 				tokens.add(user.getUniqueMobileToken());
 			}
@@ -83,4 +55,15 @@ public class NoticeManager {
 		}
 	}
 
+	public void markAsRead(String mail, ObjectId idNotice) {
+		Notice notice=nRepo.getNoticeById(idNotice);
+		notice.readedByUser(mail);
+
+	}
+
+	public void deactivate(ObjectId noticeId) {
+		Notice notice=nRepo.getNoticeById(noticeId);
+		notice.setActive(false);
+		
+	}
 }

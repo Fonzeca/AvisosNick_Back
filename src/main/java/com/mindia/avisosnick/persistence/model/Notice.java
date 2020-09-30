@@ -1,5 +1,6 @@
 package com.mindia.avisosnick.persistence.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Notice {
 		this.notifiedUsers=notifiedUsers;
 		creationDate=new Date();
 		active=true;
+		readedByUsers= new ArrayList<String>();
 	}
 	public ObjectId getId() {
 		return id;
@@ -62,6 +64,9 @@ public class Notice {
 	}
 	public void setReadedByUsers(List<String> readedByUsers) {
 		this.readedByUsers = readedByUsers;
+	}
+	public void readedByUser(String mail) {
+		readedByUsers.add(mail);
 	}
 	public Date getCreationDate() {
 		return creationDate;
