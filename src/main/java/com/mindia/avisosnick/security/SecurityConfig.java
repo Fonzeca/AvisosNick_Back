@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,10 +15,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.mindia.avisosnick.persistence.model.User;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableConfigurationProperties
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,20 +36,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		//TODO: mejorar mappings de coso xD
 		.antMatchers(HttpMethod.POST, "/login").permitAll()
-		.antMatchers(HttpMethod.POST, "/newNotice").permitAll()
-		.antMatchers(HttpMethod.POST, "/multipleNotice").permitAll()
-		.antMatchers(HttpMethod.POST, "/register").permitAll();
+		.antMatchers(HttpMethod.POST, "/register").permitAll()
+		.anyRequest().authenticated();
 	}
 
 
-	public static String getJWTToken(String email) {
+	public static String getJWTToken(User user) {
+		String authorithies = "";
+		
+		for (String rol : user.getRoles()) {
+			authorithies+= rol + ",";
+		}
+		
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList("ROLE_USER");
+				.commaSeparatedStringToAuthorityList(authorithies);
 		
 		String token = Jwts
 				.builder()
 				.setId("mindiaJWT")
-				.setSubject(email)
+				.setSubject(user.getEmail())
 				.claim("authorities",
 						grantedAuthorities.stream()
 								.map(GrantedAuthority::getAuthority)

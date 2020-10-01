@@ -7,3 +7,5 @@ database:
         db: AvisosNick
 server:
     port: 45589
+    error:
+        include-message: always

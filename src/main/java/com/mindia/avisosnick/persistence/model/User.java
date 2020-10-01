@@ -1,5 +1,7 @@
 package com.mindia.avisosnick.persistence.model;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
@@ -13,6 +15,8 @@ public class User {
     private String email;
     private String passwordHash;
     private String uniqueMobileToken;
+    private List<String> roles;
+    private List<String> userType;
     
 	public ObjectId getId() {
 		return id;
@@ -37,5 +41,17 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public List<String> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+	public List<String> getUserType() {
+		return userType;
+	}
+	public void setUserType(List<String> userType) {
+		this.userType = userType;
 	}
 }

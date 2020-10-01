@@ -1,6 +1,8 @@
 
 package com.mindia.avisosnick.view;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -8,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "email",
-    "password"
+    "password",
+    "roles",
+    "userType"
 })
 public class VUser {
 
@@ -16,13 +20,17 @@ public class VUser {
     private String email;
     @JsonProperty("password")
     private String password;
+    @JsonProperty("roles")
+    private List<String> roles = null;
+    @JsonProperty("userType")
+    private List<String> userType = null;
 
-    @JsonProperty("username")
+    @JsonProperty("email")
     public String getEmail() {
         return email;
     }
 
-    @JsonProperty("username")
+    @JsonProperty("email")
     public void setEmail(String email) {
         this.email = email;
     }
@@ -37,4 +45,23 @@ public class VUser {
         this.password = password;
     }
 
+    @JsonProperty("roles")
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    @JsonProperty("roles")
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    @JsonProperty("userType")
+    public List<String> getUserType() {
+        return userType;
+    }
+
+    @JsonProperty("userType")
+    public void setUserType(List<String> userType) {
+        this.userType = userType;
+    }
 }
