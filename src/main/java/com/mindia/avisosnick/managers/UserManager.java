@@ -1,6 +1,8 @@
 package com.mindia.avisosnick.managers;
 
 import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +46,13 @@ public class UserManager {
 		
 		
 		repo.createUser(user);
+	}
+	public List<User> getAllUsersByEmails(List<String> emails) {
+		List<User> users = new ArrayList<User>();
+		for (String string : emails) {
+			users.add(repo.getUserByEmail(string));
+		}
+		return users;
 	}
 	
 	/**

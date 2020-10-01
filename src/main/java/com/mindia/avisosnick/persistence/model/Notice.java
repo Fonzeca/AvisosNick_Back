@@ -2,35 +2,37 @@ package com.mindia.avisosnick.persistence.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "notices")
+@TypeAlias("Notice")
 public class Notice {
-	private int id;
+	@Id
+	private ObjectId id;
 	private String title, description;
-	private User autor;
-	private ArrayList <String> notifiedUsers, readedByUsers;
+	private User author;
+	private List <String> notifiedUsers, readedByUsers;
 	private Date creationDate;
 	private boolean active, mobileDisp;
 	
-	public Notice(String title, String description, User autor, ArrayList<String> notifiedUsers) {
+	public Notice(String title, String description, User autor, List<String> notifiedUsers) {
 		this.title=title;
 		this.description=description;
-		this.autor=autor;
+		this.author=autor;
 		this.notifiedUsers=notifiedUsers;
 		creationDate=new Date();
 		active=true;
+		readedByUsers= new ArrayList<String>();
 	}
-	public void removeNotice(int id) {
-		//TODO: seleccionar la noticia desde la base de datos.
-		this.active=false;
-	}
-	public void editNotice(String title, String description) {
-		this.title=title;
-		this.description=description;
-	}
-	public int getId() {
+	public ObjectId getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(ObjectId id) {
 		this.id = id;
 	}
 	public String getTitle() {
@@ -46,22 +48,25 @@ public class Notice {
 		this.description = description;
 	}
 	public User getAutor() {
-		return autor;
+		return author;
 	}
 	public void setAutor(User autor) {
-		this.autor = autor;
+		this.author = autor;
 	}
-	public ArrayList<String> getNotifiedUsers() {
+	public List<String> getNotifiedUsers() {
 		return notifiedUsers;
 	}
-	public void setNotifiedUsers(ArrayList<String> notifiedUsers) {
+	public void setNotifiedUsers(List<String> notifiedUsers) {
 		this.notifiedUsers = notifiedUsers;
 	}
-	public ArrayList<String> getReadedByUsers() {
+	public List<String> getReadedByUsers() {
 		return readedByUsers;
 	}
-	public void setReadedByUsers(ArrayList<String> readedByUsers) {
+	public void setReadedByUsers(List<String> readedByUsers) {
 		this.readedByUsers = readedByUsers;
+	}
+	public void readedByUser(String mail) {
+		readedByUsers.add(mail);
 	}
 	public Date getCreationDate() {
 		return creationDate;
