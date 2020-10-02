@@ -21,10 +21,10 @@ import com.mindia.avisosnick.persistence.model.User;
 public class NoticeManager {
 	@Autowired
 	UserManager uManager;
-	
+
 	@Autowired
 	NoticeRepository nRepo;
-	
+
 	final private int DAYINMILLISECONDS = 86400000;// 3600 seconds * 1000 to milli * 24 hours
 
 	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
@@ -56,14 +56,21 @@ public class NoticeManager {
 	}
 
 	public void markAsRead(String mail, ObjectId idNotice) {
-		Notice notice=nRepo.getNoticeById(idNotice);
+		Notice notice = nRepo.getNoticeById(idNotice);
 		notice.readedByUser(mail);
 
 	}
 
 	public void deactivate(ObjectId noticeId) {
-		Notice notice=nRepo.getNoticeById(noticeId);
+		Notice notice = nRepo.getNoticeById(noticeId);
 		notice.setActive(false);
-		
+
+	}
+
+	public void modify(ObjectId idNotice, String title, String description) {
+		Notice notice = nRepo.getNoticeById(idNotice);
+		notice.setTitle(title);
+		notice.setDescription(description);
+
 	}
 }
