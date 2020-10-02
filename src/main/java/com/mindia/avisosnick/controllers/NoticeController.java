@@ -2,6 +2,7 @@ package com.mindia.avisosnick.controllers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +30,21 @@ public class NoticeController {
 
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void createNotice(@RequestParam List<String> mails, @RequestParam boolean send, @RequestParam String title,
-			@RequestParam String description, @RequestParam User author) {
-
-		manager.createNotice(mails, send, title, description, author);
+	public void createNotice(
+//			@RequestParam List<String> mails, 
+			@RequestParam boolean send, @RequestParam String title,
+			@RequestParam String description
+//			, @RequestParam User author
+			) {
+		
+		List<String> mails= new ArrayList<String> ();
+		//TODO: REMOVE
+		mails.add("daiko_011@hotmail.com");
+		mails.add("daiko_022@hotmail.com");
+		
+		User user= new User();
+		user.setEmail("as@gh.com");
+		manager.createNotice(mails, send, title, description, user);
 	}
 
 	@PostMapping("/markReaded")
@@ -51,6 +64,12 @@ public class NoticeController {
 	public void modifyNotice(@RequestParam ObjectId idNotice, @RequestParam String title,
 			@RequestParam String description) {
 		manager.modify(idNotice, title, description);
+	}
+	
+	@GetMapping("/readedBy")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
+	public List<String> getReaders(@RequestParam ObjectId idNotice){
+		return manager.getReaders(idNotice);
 	}
 
 	@PostConstruct

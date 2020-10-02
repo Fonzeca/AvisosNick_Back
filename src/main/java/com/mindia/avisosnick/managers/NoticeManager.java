@@ -29,12 +29,12 @@ public class NoticeManager {
 
 	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
 		Notice notice = new Notice(title, description, author, mails);
-		nRepo.createNotice(notice);
 		if (send) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
 				tokens.add(user.getUniqueMobileToken());
+				System.out.println(user.getUniqueMobileToken());
 			}
 			MulticastMessage notification = MulticastMessage.builder()
 					.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
@@ -53,6 +53,8 @@ public class NoticeManager {
 			}
 			// [END send_multicast]
 		}
+		nRepo.createNotice(notice);
+
 	}
 
 	public void markAsRead(String mail, ObjectId idNotice) {
@@ -72,5 +74,11 @@ public class NoticeManager {
 		notice.setTitle(title);
 		notice.setDescription(description);
 
+	}
+
+	public List<String> getReaders(ObjectId idNotice) {
+		Notice notice= nRepo.getNoticeById(idNotice);
+		return notice.getReadedByUsers();
+			
 	}
 }

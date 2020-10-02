@@ -1,8 +1,8 @@
 package com.mindia.avisosnick.managers;
 
-import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,5 +113,10 @@ public class UserManager {
 		user.setPasswordHash(vUser.getPassword());
 		
 		return user;
+	}
+	public void setToken(String mail, String token) {
+		User user=repo.getUserByEmail(mail);
+		user.setUniqueMobileToken(token);
+		repo.updateUser(user);
 	}
 }
