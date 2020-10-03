@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		//TODO: mejorar mappings de coso xD
 		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.antMatchers(HttpMethod.POST, "/loginWithGoogle").permitAll()
 		.antMatchers(HttpMethod.POST, "/register").permitAll()
 		.anyRequest().authenticated();
 	}
@@ -61,6 +62,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 								.collect(Collectors.toList()))
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + (secondsUntilExpires * 1000)))
+				.signWith(SignatureAlgorithm.HS512,
+						secretKey.getBytes()).compact();
+
+		return token;
+	}
+	
+	public static String getJWTTokenWithOAuth(User user) {
+		String authorithies = "";
+		
+		for (String rol : user.getRoles()) {
+			authorithies+= rol + ",";
+		}
+		
+		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+				.commaSeparatedStringToAuthorityList(authorithies);
+		
+		String token = Jwts
+				.builder()
+				.setId("mindiaJWT")
+				.setSubject(user.getEmail())
+				.claim("authorities",
+						grantedAuthorities.stream()
+								.map(GrantedAuthority::getAuthority)
+								.collect(Collectors.toList()))
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(user.getAuth().getExpirationLastIdToken()))
 				.signWith(SignatureAlgorithm.HS512,
 						secretKey.getBytes()).compact();
 

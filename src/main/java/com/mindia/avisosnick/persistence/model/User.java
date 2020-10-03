@@ -17,6 +17,7 @@ public class User {
     private String uniqueMobileToken;
     private List<String> roles;
     private List<String> userType;
+    private AuthUser auth;
     
 	public ObjectId getId() {
 		return id;
@@ -53,5 +54,11 @@ public class User {
 	}
 	public void setUserType(List<String> userType) {
 		this.userType = userType;
+	}
+	public AuthUser getAuth() {
+		return auth;
+	}
+	public void setAuth(AuthUser auth) {
+		this.auth = auth;
 	}
 }
