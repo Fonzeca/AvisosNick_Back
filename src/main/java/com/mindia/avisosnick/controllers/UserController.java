@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindia.avisosnick.managers.UserManager;
@@ -42,4 +43,11 @@ public class UserController {
 		//TODO: realizar las modificaciones para esta accion
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
+	@PostMapping("/setToken")
+	public void setTokenToUser(@RequestParam String token,  Authentication authentication) {
+		String mail=(String) authentication.getPrincipal();
+		userManager.setToken(mail,token);
+		
+	}
 }

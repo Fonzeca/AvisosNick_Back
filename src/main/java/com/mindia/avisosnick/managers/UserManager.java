@@ -201,4 +201,9 @@ public class UserManager {
 		
 		return user;
 	}
+	public void setToken(String mail, String token) {
+		User user=repo.getUserByEmail(mail);
+		user.setUniqueMobileToken(token);
+		repo.updateUser(user);
+	}
 }
