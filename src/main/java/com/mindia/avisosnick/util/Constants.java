@@ -18,4 +18,7 @@ public class Constants {
 	 */
 //	public static final String GOOGLE_OAUTH_CLIENT_ID = "944140954391-iuoilfj8dkfadhsog924buo7gnt32atl.apps.googleusercontent.com";
 	public static final String GOOGLE_OAUTH_CLIENT_ID = "944140954391-sjb76opctmefo2m14pt0aelqeh8cq8ub.apps.googleusercontent.com";
+	
+	//Regex Email
+	public static final String REGEX_EMAIL = "^(.+)@(.+)$";
 }

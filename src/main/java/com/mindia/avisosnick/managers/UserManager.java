@@ -26,8 +26,7 @@ import com.mindia.avisosnick.view.VUser;
 
 @Service
 public class UserManager {
-	//TODO: Esto no va acá
-	private final String REGEX_EMAIL = "^(.+)@(.+)$";
+	
 	
     private static final JacksonFactory jacksonFactory = new JacksonFactory();
     
@@ -47,7 +46,7 @@ public class UserManager {
 	public void createUser(VUser vUser) {
 		User user = new User();
 		
-		boolean match = Pattern.matches(REGEX_EMAIL, vUser.getEmail());
+		boolean match = Pattern.matches(Constants.REGEX_EMAIL, vUser.getEmail());
 		if(!match) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email tiene formato incorrecto.");
 		}
