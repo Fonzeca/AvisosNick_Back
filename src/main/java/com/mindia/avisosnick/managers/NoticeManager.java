@@ -94,8 +94,4 @@ public class NoticeManager {
 		return noticesForUser;
 	}
 
-	public List<String> getUsersWhoReaded(ObjectId noticeId) {
-		Notice notice = nRepo.getNoticeById(noticeId);
-		return notice.getReadedByUsers();
-	}
 }

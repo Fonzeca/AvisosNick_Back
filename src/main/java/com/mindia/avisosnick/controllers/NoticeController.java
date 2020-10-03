@@ -48,7 +48,7 @@ public class NoticeController {
 		manager.createNotice(mails, send, title, description, user);
 	}
 
-	@PostMapping("/markReaded")
+	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
 	public void markNoticeAsRead(@RequestParam String mail, @RequestParam ObjectId idNotice) {
 		manager.markAsRead(mail, idNotice);
@@ -67,8 +67,8 @@ public class NoticeController {
 		manager.modify(idNotice, title, description);
 	}
 	
-	@PostMapping("/markAsRead")
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
+	@PostMapping("/readedBy")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<String> getReaders(@RequestParam ObjectId idNotice){
 		return manager.getReaders(idNotice);
 	}
@@ -77,12 +77,6 @@ public class NoticeController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
 	public List<Notice> noticesByUser(@RequestParam String mail){
 		return manager.getNoticesByUser(mail);
-	}
-	
-	@GetMapping("/readedBy")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public List<String> usersWhoReaded(@RequestParam ObjectId noticeId){
-		return manager.getUsersWhoReaded(noticeId);
 	}
 	
 	@PostConstruct
