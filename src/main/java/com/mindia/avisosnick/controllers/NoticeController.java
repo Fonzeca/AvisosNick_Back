@@ -20,6 +20,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.mindia.avisosnick.managers.NoticeManager;
+import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
 
 @RestController
@@ -66,12 +67,24 @@ public class NoticeController {
 		manager.modify(idNotice, title, description);
 	}
 	
-	@GetMapping("/readedBy")
+	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
 	public List<String> getReaders(@RequestParam ObjectId idNotice){
 		return manager.getReaders(idNotice);
 	}
 
+	@GetMapping("/checkNotices")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
+	public List<Notice> noticesByUser(@RequestParam String mail){
+		return manager.getNoticesByUser(mail);
+	}
+	
+	@GetMapping("/readedBy")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public List<String> usersWhoReaded(@RequestParam ObjectId noticeId){
+		return manager.getUsersWhoReaded(noticeId);
+	}
+	
 	@PostConstruct
 	private void firebaseLogIn() {
 		try {
