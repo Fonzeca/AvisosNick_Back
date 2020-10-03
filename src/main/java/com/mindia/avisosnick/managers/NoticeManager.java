@@ -81,4 +81,21 @@ public class NoticeManager {
 		return notice.getReadedByUsers();
 			
 	}
+
+	public List<Notice> getNoticesByUser(String mail) {
+		List<Notice> noticesForUser= new ArrayList<Notice>();
+		for (Notice notice : nRepo.getAllNotices()) {
+			for(String userMail:notice.getNotifiedUsers()) {
+				if (userMail.equals(mail)) {
+					noticesForUser.add(notice);
+				}
+			}
+		}
+		return noticesForUser;
+	}
+
+	public List<String> getUsersWhoReaded(ObjectId noticeId) {
+		Notice notice = nRepo.getNoticeById(noticeId);
+		return notice.getReadedByUsers();
+	}
 }

@@ -2,6 +2,8 @@ package com.mindia.avisosnick.persistence;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,4 +30,9 @@ public class NoticeRepository {
 
 		return mongoTemplate.findOne(query, Notice.class);
 	}
+	
+	public List<Notice> getAllNotices(){
+		return mongoTemplate.findAll(Notice.class);
+	}
+
 }
