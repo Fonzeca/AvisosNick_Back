@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,18 +24,21 @@ import com.google.firebase.FirebaseOptions;
 import com.mindia.avisosnick.managers.NoticeManager;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
+import com.mindia.avisosnick.view.PojoIdNotice;
+import com.mindia.avisosnick.view.PojoModifyNotice;
 
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
 	@Autowired
 	NoticeManager manager;
+	
 
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void createNotice(
 //			@RequestParam List<String> mails, 
-			@RequestParam boolean send, @RequestParam String title,
+			@RequestParam boolean sendNotification, @RequestParam String title,
 			@RequestParam String description
 //			, @RequestParam User author
 			) {
@@ -46,32 +50,31 @@ public class NoticeController {
 		User user= new User();
 		user.setEmail("as@gh.com");
 		
-		manager.createNotice(mails, send, title, description, user);
+		manager.createNotice(mails, sendNotification, title, description, user);
 	}
 
 	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
-	public void markNoticeAsRead(@RequestParam String mail, @RequestParam ObjectId idNotice) {
-		manager.markAsRead(mail, idNotice);
+	public void markNoticeAsRead(@RequestBody PojoIdNotice idNotice, Authentication authentication) {
+		manager.markAsRead((String)authentication.getPrincipal(), new ObjectId(idNotice.getIdNotice()));
 	}
 
 	@PostMapping("/deactivate")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void deactivateNotice(@RequestParam ObjectId noticeId) {
-		manager.deactivate(noticeId);
+	public void deactivateNotice(@RequestBody PojoIdNotice idNotice) {
+		manager.deactivate(new ObjectId(idNotice.getIdNotice()));
 	}
 
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void modifyNotice(@RequestParam ObjectId idNotice, @RequestParam String title,
-			@RequestParam String description) {
-		manager.modify(idNotice, title, description);
+	public void modifyNotice(@RequestBody PojoModifyNotice modifyNotice) {
+		manager.modify(new ObjectId(modifyNotice.getIdNotice()), modifyNotice.getTitle(), modifyNotice.getDescription());
 	}
 	
 	@PostMapping("/readedBy")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public List<String> getReaders(@RequestParam ObjectId idNotice){
-		return manager.getReaders(idNotice);
+	public List<String> getReaders(@RequestBody PojoIdNotice idNotice){
+		return manager.getReaders(new ObjectId(idNotice.getIdNotice()));
 	}
 
 	@GetMapping("/checkNotices")
