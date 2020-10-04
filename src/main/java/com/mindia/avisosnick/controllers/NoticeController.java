@@ -28,6 +28,8 @@ import com.mindia.avisosnick.managers.UserManager;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.view.PojoCreateNotice;
+import com.mindia.avisosnick.view.PojoId;
+import com.mindia.avisosnick.view.PojoModifyNotice;
 
 @RestController
 @RequestMapping("/notice")
@@ -53,27 +55,26 @@ public class NoticeController {
 
 	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
-	public void markNoticeAsRead(@RequestParam String mail, @RequestParam ObjectId idNotice) {
-		manager.markAsRead(mail, idNotice);
+	public void markNoticeAsRead(@RequestBody PojoId idNotice, Authentication authentication) {
+		manager.markAsRead((String)authentication.getPrincipal(), new ObjectId(idNotice.getId()));
 	}
 
 	@PostMapping("/deactivate")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void deactivateNotice(@RequestParam ObjectId noticeId) {
-		manager.deactivate(noticeId);
+	public void deactivateNotice(@RequestBody PojoId idNotice) {
+		manager.deactivate(new ObjectId(idNotice.getId()));
 	}
 
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void modifyNotice(@RequestParam ObjectId idNotice, @RequestParam String title,
-			@RequestParam String description) {
-		manager.modify(idNotice, title, description);
+	public void modifyNotice(@RequestBody PojoModifyNotice modifyNotice) {
+		manager.modify(new ObjectId(modifyNotice.getIdNotice()), modifyNotice.getTitle(), modifyNotice.getDescription());
 	}
 	
 	@PostMapping("/readedBy")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public List<String> getReaders(@RequestParam ObjectId idNotice){
-		return manager.getReaders(idNotice);
+	public List<String> getReaders(@RequestBody PojoId idNotice){
+		return manager.getReaders(new ObjectId(idNotice.getId()));
 	}
 
 	@GetMapping("/checkNotices")
