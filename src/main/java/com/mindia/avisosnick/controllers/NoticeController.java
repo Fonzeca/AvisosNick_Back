@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,9 +43,9 @@ public class NoticeController {
 		//TODO: REMOVE
 		mails.add("daiko_011@hotmail.com");
 		mails.add("daiko_022@hotmail.com");
-		
 		User user= new User();
 		user.setEmail("as@gh.com");
+		
 		manager.createNotice(mails, send, title, description, user);
 	}
 
@@ -75,8 +76,8 @@ public class NoticeController {
 
 	@GetMapping("/checkNotices")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
-	public List<Notice> noticesByUser(@RequestParam String mail){
-		return manager.getNoticesByUser(mail);
+	public List<Notice> noticesByUser(Authentication authentication){
+		return manager.getNoticesByUser((String)authentication.getPrincipal());
 	}
 	
 	@PostConstruct
