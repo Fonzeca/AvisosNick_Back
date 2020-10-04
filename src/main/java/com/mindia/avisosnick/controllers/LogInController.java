@@ -2,6 +2,8 @@ package com.mindia.avisosnick.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +31,17 @@ public class LogInController {
 	public String LogIn(@RequestParam("idToken") String idToken) {
 		User user = userManager.validateLogInGoogle(idToken);
 		
+		
 		String token = SecurityConfig.getJWTTokenWithOAuth(user);
 		return token;
 	}
+	
+	@PreAuthorize("permitAll()")
+	@GetMapping("/validateToken")
+	public boolean ValidateToken(Authentication auth) {
+		return auth.isAuthenticated();
+	}
+	
 	
 //	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
 //	@PostMapping("/register")
