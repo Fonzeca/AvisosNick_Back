@@ -24,7 +24,7 @@ import com.google.firebase.FirebaseOptions;
 import com.mindia.avisosnick.managers.NoticeManager;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
-import com.mindia.avisosnick.view.PojoIdNotice;
+import com.mindia.avisosnick.view.PojoId;
 import com.mindia.avisosnick.view.PojoModifyNotice;
 
 @RestController
@@ -55,14 +55,14 @@ public class NoticeController {
 
 	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
-	public void markNoticeAsRead(@RequestBody PojoIdNotice idNotice, Authentication authentication) {
-		manager.markAsRead((String)authentication.getPrincipal(), new ObjectId(idNotice.getIdNotice()));
+	public void markNoticeAsRead(@RequestBody PojoId idNotice, Authentication authentication) {
+		manager.markAsRead((String)authentication.getPrincipal(), new ObjectId(idNotice.getId()));
 	}
 
 	@PostMapping("/deactivate")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void deactivateNotice(@RequestBody PojoIdNotice idNotice) {
-		manager.deactivate(new ObjectId(idNotice.getIdNotice()));
+	public void deactivateNotice(@RequestBody PojoId idNotice) {
+		manager.deactivate(new ObjectId(idNotice.getId()));
 	}
 
 	@PostMapping("/modify")
@@ -73,8 +73,8 @@ public class NoticeController {
 	
 	@PostMapping("/readedBy")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public List<String> getReaders(@RequestBody PojoIdNotice idNotice){
-		return manager.getReaders(new ObjectId(idNotice.getIdNotice()));
+	public List<String> getReaders(@RequestBody PojoId idNotice){
+		return manager.getReaders(new ObjectId(idNotice.getId()));
 	}
 
 	@GetMapping("/checkNotices")
