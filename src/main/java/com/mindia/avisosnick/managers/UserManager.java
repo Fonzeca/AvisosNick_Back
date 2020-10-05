@@ -252,7 +252,7 @@ public class UserManager {
 	
 	/**
 	 * Se elimina un tipo de usuario a un usuario
-	 * TODO: comprobar que no quede vacío.
+	 * TODO: comprobar que no quede vacï¿½o.
 	 * @param mail
 	 * @param type
 	 */
