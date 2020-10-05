@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mindia.avisosnick.managers.UserManager;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
+import com.mindia.avisosnick.view.PojoDoubleString;
 import com.mindia.avisosnick.view.VUser;
 
 @RestController
@@ -65,5 +66,17 @@ public class UserController {
 	@GetMapping("/allUsersByType")
 	public List<User> getUsersByType(@RequestParam String type){
 		return userManager.getUsersByType(type);
+	}
+	
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@PostMapping("/setType")
+	public void setTypeToUser(@RequestBody PojoDoubleString pojo) {
+		userManager.setType(pojo.getString1(),pojo.getString2());
+	}
+	
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@PostMapping("/removeType")
+	public void removeTypeToUser(@RequestBody PojoDoubleString pojo) {
+		userManager.removeType(pojo.getString1(),pojo.getString2());
 	}
 }

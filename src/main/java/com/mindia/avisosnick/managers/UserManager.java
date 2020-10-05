@@ -234,4 +234,33 @@ public class UserManager {
 		}
 		return userByType;
 	}
+	
+	/**
+	 * Se le asigna un nuevo tipo de usuario a un usuario
+	 * TODO: comprobar que no sea repetido.
+	 * @param mail
+	 * @param type
+	 */
+	public void setType(String mail, String type) {
+		User user=repo.getUserByEmail(mail);
+		List<String> types=user.getUserType();
+		types.add(type);
+		user.setUserType(types);
+		repo.updateUser(user);
+		
+	}
+	
+	/**
+	 * Se elimina un tipo de usuario a un usuario
+	 * TODO: comprobar que no quede vacío.
+	 * @param mail
+	 * @param type
+	 */
+	public void removeType(String mail, String type) {
+		User user=repo.getUserByEmail(mail);
+		List<String> types=user.getUserType();
+		types.remove(type);
+		user.setUserType(types);
+		repo.updateUser(user);
+	}
 }
