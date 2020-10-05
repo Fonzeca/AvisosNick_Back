@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 
 
@@ -42,7 +43,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			
 			filterChain.doFilter(request, response);
 			
-		} catch (Exception e) {
+		}catch (ExpiredJwtException e) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "El token expiro.");
+			return;
+		} 
+		catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
 			return;
