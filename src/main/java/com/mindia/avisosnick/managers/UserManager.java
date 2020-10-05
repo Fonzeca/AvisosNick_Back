@@ -41,7 +41,7 @@ public class UserManager {
 	UserRepository repo;
 	
 	/**
-	 * Se utiliza cuando un adminisitrador quiere crear un usuario. 
+	 * Se utiliza cuando un administrador quiere crear un usuario. 
 	 */
 	public void createUser(VUser vUser) {
 		User user = new User();
@@ -200,9 +200,38 @@ public class UserManager {
 		
 		return user;
 	}
+	/**
+	 * Se asocia un token con un usuario, para esto se pide el mail del usuario y el token a asignar.
+	 * @param mail
+	 * @param token
+	 */
 	public void setToken(String mail, String token) {
 		User user=repo.getUserByEmail(mail);
 		user.setUniqueMobileToken(token);
 		repo.updateUser(user);
+	}
+	/**
+	 * Lista todos los usuarios encontrados en la db.
+	 * @return una lista de User
+	 */
+	public List<User> getUsers(){
+		return repo.getUsers();
+	}
+	
+	/**
+	 * Lista todos los usuarios con el tipo pedido.
+	 * @param type - el tipo de usuario que se busca listar
+	 * @return Lista de user
+	 */
+	public List<User> getUsersByType(String type){
+		List<User> userByType= new ArrayList<User>();
+		for (User user : repo.getUsers()) {
+			for (String userType : user.getUserType()) {
+				if (type.equals(userType)) {
+					userByType.add(user);
+				}
+			}
+		}
+		return userByType;
 	}
 }
