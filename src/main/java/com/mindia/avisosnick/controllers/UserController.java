@@ -1,8 +1,11 @@
 package com.mindia.avisosnick.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindia.avisosnick.managers.UserManager;
+import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
 import com.mindia.avisosnick.view.VUser;
 
@@ -50,5 +54,16 @@ public class UserController {
 		String mail=(String) authentication.getPrincipal();
 		userManager.setToken(mail,token);
 		
+	}
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@GetMapping("/allUsers")
+	public List<User> getUsers(){
+		return userManager.getUsers();
+	}
+	
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@GetMapping("/allUsersByType")
+	public List<User> getUsersByType(@RequestParam String type){
+		return userManager.getUsersByType(type);
 	}
 }
