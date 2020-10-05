@@ -9,21 +9,23 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.mindia.avisosnick.view.PojoUser;
+
 @Document(collection = "notices")
 @TypeAlias("Notice")
 public class Notice {
 	@Id
 	private ObjectId id;
 	private String title, description;
-	private User author;
+	private PojoUser author;
 	private List <String> notifiedUsers, readedByUsers;
 	private Date creationDate;
 	private boolean active, mobileDisp;
 	
-	public Notice(String title, String description, User autor, List<String> notifiedUsers) {
+	public Notice(String title, String description, PojoUser author, List<String> notifiedUsers) {
 		this.title=title;
 		this.description=description;
-		this.author=autor;
+		this.author=author;
 		this.notifiedUsers=notifiedUsers;
 		creationDate=new Date();
 		active=true;
@@ -47,10 +49,10 @@ public class Notice {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public User getAutor() {
+	public PojoUser getAutor() {
 		return author;
 	}
-	public void setAutor(User autor) {
+	public void setAutor(PojoUser autor) {
 		this.author = autor;
 	}
 	public List<String> getNotifiedUsers() {
