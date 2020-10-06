@@ -32,7 +32,7 @@ public class TypeManager {
 	/**
 	 * Se utiliza para listar los tipos de usuario disponibles
 	 */
-	public List<UserType> types(){
+	public List<UserType> getTypes(){
 		return repo.getAllTypes();
 	}
 	/**
@@ -45,11 +45,28 @@ public class TypeManager {
 		repo.updateUserType(type);
 	}
 	
+	/**
+	 * Se desactiva un tipo de usuario
+	 * @param code
+	 */
 	public void deactivateType(String code) {
 		UserType type=repo.getUserByCode(code);
 		type.setActive(false);
 		repo.updateUserType(type);
 	}
 
+	/**
+	 * Método para comprobar si existe un tipo de usuario con el código ingresado
+	 * @param code
+	 * @return
+	 */
+	public boolean typeExist(String code) {
+		for(UserType type:getTypes()) {
+			if(type.getCode().equals(code)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

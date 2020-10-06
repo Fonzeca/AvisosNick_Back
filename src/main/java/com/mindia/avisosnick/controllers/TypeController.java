@@ -32,7 +32,7 @@ public class TypeController {
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	@GetMapping("/allTypes")
 	public List<UserType> getTypes() {
-		return manager.types();
+		return manager.getTypes();
 	}
 	
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
