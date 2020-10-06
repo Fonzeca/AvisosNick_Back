@@ -1,9 +1,13 @@
 image: docker:latest
 services:
   - docker:dind
+  
+variables:
+  VERSION: 0.0.1-SNAPSHOT
 
 stages:
   - build
+  - upload package
 
 maven-build:
   image: maven:3-jdk-8
@@ -12,3 +16,23 @@ maven-build:
   artifacts:
     paths:
       - target/*.jar
+  
+upload-package:
+  stage: upload package
+  allow_failure: true
+  dependencies:
+    - maven-build
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - scp -v -P 5292 '/target/AvisosNick_Back-$VERSION.jar' root@vps-1791261-x.dattaweb.com:/root/Alexis/target/AvisosNick_Back-"$VERSION".jar .
+  artifacts:
+    paths:
+      - target/
