@@ -16,6 +16,7 @@ import com.google.firebase.messaging.MulticastMessage;
 import com.mindia.avisosnick.persistence.NoticeRepository;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
+import com.mindia.avisosnick.view.PojoUser;
 
 @Service
 public class NoticeManager {
@@ -28,7 +29,13 @@ public class NoticeManager {
 	final private int DAYINMILLISECONDS = 86400000;// 3600 seconds * 1000 to milli * 24 hours
 
 	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
-		Notice notice = new Notice(title, description, author, mails);
+		PojoUser pUser = new PojoUser();
+		// TODO: crear nombre y apellido en base de datos
+		pUser.setMail(author.getEmail());
+		// pUser.setName(author.getName());
+		// pUser.setLastName(author.getLastName());
+
+		Notice notice = new Notice(title, description, pUser, mails);
 		if (send) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
@@ -60,12 +67,14 @@ public class NoticeManager {
 	public void markAsRead(String mail, ObjectId idNotice) {
 		Notice notice = nRepo.getNoticeById(idNotice);
 		notice.readedByUser(mail);
+		nRepo.createNotice(notice);
 
 	}
 
 	public void deactivate(ObjectId noticeId) {
 		Notice notice = nRepo.getNoticeById(noticeId);
 		notice.setActive(false);
+		nRepo.createNotice(notice);
 
 	}
 
@@ -73,19 +82,20 @@ public class NoticeManager {
 		Notice notice = nRepo.getNoticeById(idNotice);
 		notice.setTitle(title);
 		notice.setDescription(description);
+		nRepo.createNotice(notice);
 
 	}
 
 	public List<String> getReaders(ObjectId idNotice) {
-		Notice notice= nRepo.getNoticeById(idNotice);
+		Notice notice = nRepo.getNoticeById(idNotice);
 		return notice.getReadedByUsers();
-			
+
 	}
 
 	public List<Notice> getNoticesByUser(String mail) {
-		List<Notice> noticesForUser= new ArrayList<Notice>();
+		List<Notice> noticesForUser = new ArrayList<Notice>();
 		for (Notice notice : nRepo.getAllNotices()) {
-			for(String userMail:notice.getNotifiedUsers()) {
+			for (String userMail : notice.getNotifiedUsers()) {
 				if (userMail.equals(mail)) {
 					noticesForUser.add(notice);
 				}
