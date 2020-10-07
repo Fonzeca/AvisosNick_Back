@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.mindia.avisosnick.persistence.TypeRepository;
 import com.mindia.avisosnick.persistence.model.UserType;
 import com.mindia.avisosnick.view.PojoUserType;
 
+@Service
 public class TypeManager {
 
 	@Autowired
