@@ -1,7 +1,7 @@
 package com.mindia.avisosnick.controllers;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,8 +87,12 @@ public class NoticeController {
 	private void firebaseLogIn() {
 		//TODO: sacar esto a otro lado
 		try {
-			FileInputStream serviceAccount = new FileInputStream(
-					"src/main/resources/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
+			
+			InputStream serviceAccount =
+					getClass().getResourceAsStream("/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
+					
+//					new FileInputStream(
+//					"src/main/resources/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
 
 			FirebaseOptions options = FirebaseOptions.builder()
 					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
