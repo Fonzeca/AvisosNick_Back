@@ -22,6 +22,7 @@ import com.mindia.avisosnick.persistence.UserRepository;
 import com.mindia.avisosnick.persistence.model.AuthUser;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
+import com.mindia.avisosnick.view.PojoUser;
 import com.mindia.avisosnick.view.VUser;
 
 @Service
@@ -60,7 +61,6 @@ public class UserManager {
 
 		user.setEmail(vUser.getEmail());
 		user.setFullName(vUser.getFullName());
-		
 
 		// TODO: hashear password
 		user.setPasswordHash(vUser.getPassword());
@@ -230,8 +230,17 @@ public class UserManager {
 	 * 
 	 * @return una lista de User
 	 */
-	public List<User> getUsers() {
-		return repo.getUsers();
+	public List<PojoUser> getUsers() {
+		List<PojoUser> pojoUsers = new ArrayList<PojoUser>();
+		for (User u : repo.getUsers()) {
+			
+			PojoUser pojo = new PojoUser();
+			pojo.setFullName(u.getFullName());
+			pojo.setMail(u.getEmail());
+			
+			pojoUsers.add(pojo);
+		}
+		return pojoUsers;
 	}
 
 	/**
@@ -240,12 +249,15 @@ public class UserManager {
 	 * @param type - el tipo de usuario que se busca listar
 	 * @return Lista de user
 	 */
-	public List<User> getUsersByType(String type) {
-		List<User> userByType = new ArrayList<User>();
+	public List<PojoUser> getUsersByType(String type) {
+		List<PojoUser> userByType = new ArrayList<PojoUser>();
 		for (User user : repo.getUsers()) {
 			for (String userType : user.getUserType()) {
 				if (type.equals(userType)) {
-					userByType.add(user);
+					PojoUser pojo= new PojoUser();
+					pojo.setFullName(user.getFullName());
+					pojo.setMail(user.getEmail());
+					userByType.add(pojo);
 				}
 			}
 		}
@@ -291,15 +303,19 @@ public class UserManager {
 
 	/**
 	 * Se busca un usuario concreto por mail
+	 * 
 	 * @param mail
 	 * @return un usuario o null en caso de no encontrarlo.
 	 */
-	public User getUserByMail(String mail) {
-		for (User user : getUsers()) {
+	public PojoUser getUserByMail(String mail) {
+		for (User user : repo.getUsers()) {
 			if (user.getEmail().equals(mail)) {
-				return user;
+				PojoUser pojo= new PojoUser();
+				pojo.setFullName(user.getFullName());
+				pojo.setMail(mail);
+				return pojo;
 			}
 		}
-		return null;
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ningún usuario resgistrado.");
 	}
 }

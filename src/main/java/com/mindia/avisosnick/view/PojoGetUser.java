@@ -2,50 +2,46 @@
 package com.mindia.avisosnick.view;
 
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "email",
-    "password",
+    "mail",
+    "fullName",
     "roles",
-    "userType",
-    "fullName"
+    "userType"
 })
-public class VUser {
+public class PojoGetUser {
 
-    @JsonProperty("email")
-    private String email;
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("mail")
+    private String mail;
+    @JsonProperty("fullName")
+    private String fullName;
     @JsonProperty("roles")
     private List<String> roles = null;
     @JsonProperty("userType")
     private List<String> userType = null;
+
+    @JsonProperty("mail")
+    public String getMail() {
+        return mail;
+    }
+
+    @JsonProperty("mail")
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     @JsonProperty("fullName")
-    private String fullName = null;
-
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
+    public String getFullName() {
+        return fullName;
     }
 
-    @JsonProperty("email")
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @JsonProperty("password")
-    public String getPassword() {
-        return password;
-    }
-
-    @JsonProperty("password")
-    public void setPassword(String password) {
-        this.password = password;
+    @JsonProperty("fullName")
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @JsonProperty("roles")
@@ -67,14 +63,5 @@ public class VUser {
     public void setUserType(List<String> userType) {
         this.userType = userType;
     }
-    
-    @JsonProperty("fullName")
-	public String getFullName() {
-		return fullName;
-	}
-    
-    @JsonProperty("fullName")
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+
 }

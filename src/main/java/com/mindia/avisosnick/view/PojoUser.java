@@ -8,17 +8,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "mail",
-    "name",
-    "lastName"
+    "fullName"
 })
 public class PojoUser {
 
     @JsonProperty("mail")
     private String mail;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("lastName")
-    private String lastName;
+    @JsonProperty("fullName")
+    private String fullName;
 
     @JsonProperty("mail")
     public String getMail() {
@@ -30,24 +27,16 @@ public class PojoUser {
         this.mail = mail;
     }
 
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("fullName")
+	public String getFullName() {
+		return fullName;
+	}
 
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
+    @JsonProperty("fullName")
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    @JsonProperty("lastName")
-    public String getLastName() {
-        return lastName;
-    }
 
-    @JsonProperty("lastName")
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
 }

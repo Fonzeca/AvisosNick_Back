@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindia.avisosnick.managers.UserManager;
-import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
 import com.mindia.avisosnick.view.PojoDoubleString;
+import com.mindia.avisosnick.view.PojoUser;
 import com.mindia.avisosnick.view.VUser;
 
 @RestController
@@ -58,13 +58,13 @@ public class UserController {
 	}
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	@GetMapping("/allUsers")
-	public List<User> getUsers(){
+	public List<PojoUser> getUsers(){
 		return userManager.getUsers();
 	}
 	
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	@GetMapping("/allUsersByType")
-	public List<User> getUsersByType(@RequestParam String type){
+	public List<PojoUser> getUsersByType(@RequestParam String type){
 		return userManager.getUsersByType(type);
 	}
 	
@@ -82,7 +82,7 @@ public class UserController {
 	
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	@GetMapping("/getUserByMail")
-	public User getUserByMail(@RequestParam String mail ) {
+	public PojoUser getUserByMail(@RequestParam String mail ) {
 		return userManager.getUserByMail(mail);
 	}
 }
