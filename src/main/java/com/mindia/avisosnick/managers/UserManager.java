@@ -285,4 +285,18 @@ public class UserManager {
 		user.setUserType(types);
 		repo.updateUser(user);
 	}
+
+	/**
+	 * Se busca un usuario concreto por mail
+	 * @param mail
+	 * @return un usuario o null en caso de no encontrarlo.
+	 */
+	public User getUserByMail(String mail) {
+		for (User user : getUsers()) {
+			if (user.getEmail().equals(mail)) {
+				return user;
+			}
+		}
+		return null;
+	}
 }

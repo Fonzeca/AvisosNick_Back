@@ -104,4 +104,8 @@ public class NoticeManager {
 		return noticesForUser;
 	}
 
+	public Notice getNotice(String id) {
+		return nRepo.getNoticeById(new ObjectId(id));
+	}
+
 }

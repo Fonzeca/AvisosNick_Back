@@ -79,4 +79,10 @@ public class UserController {
 	public void removeTypeToUser(@RequestBody PojoDoubleString pojo) {
 		userManager.removeType(pojo.getString1(),pojo.getString2());
 	}
+	
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@GetMapping("/getUserByMail")
+	public User getUserByMail(@RequestParam String mail ) {
+		return userManager.getUserByMail(mail);
+	}
 }

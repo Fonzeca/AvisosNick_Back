@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -81,6 +82,12 @@ public class NoticeController {
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")
 	public List<Notice> noticesByUser(Authentication authentication){
 		return manager.getNoticesByUser((String)authentication.getPrincipal());
+	}
+	
+	@PreAuthorize("hasRole('\" + Constants.ROLE_ADMIN + \"') OR hasRole('\" + Constants.ROLE_USER + \"')")
+	@GetMapping("/get")
+	public Notice getNoticeById(@RequestParam String id) {
+		return manager.getNotice(id);
 	}
 	
 	@PostConstruct
