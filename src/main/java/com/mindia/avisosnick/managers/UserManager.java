@@ -59,6 +59,8 @@ public class UserManager {
 		}
 
 		user.setEmail(vUser.getEmail());
+		user.setFullName(vUser.getFullName());
+		
 
 		// TODO: hashear password
 		user.setPasswordHash(vUser.getPassword());
@@ -205,6 +207,7 @@ public class UserManager {
 		}
 
 		user.setPasswordHash(vUser.getPassword());
+		user.setFullName(vUser.getFullName());
 
 		return user;
 	}

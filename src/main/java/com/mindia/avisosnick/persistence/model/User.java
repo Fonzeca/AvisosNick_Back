@@ -17,6 +17,7 @@ public class User {
     private String uniqueMobileToken;
     private List<String> roles;
     private List<String> userType;
+    private String fullName;
     private AuthUser auth;
     
 	public ObjectId getId() {
@@ -60,5 +61,11 @@ public class User {
 	}
 	public void setAuth(AuthUser auth) {
 		this.auth = auth;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 }

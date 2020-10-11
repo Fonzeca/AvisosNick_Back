@@ -24,6 +24,8 @@ public class VUser {
     private List<String> roles = null;
     @JsonProperty("userType")
     private List<String> userType = null;
+    @JsonProperty("fullName")
+    private String fullName = null;
 
     @JsonProperty("email")
     public String getEmail() {
@@ -64,4 +66,14 @@ public class VUser {
     public void setUserType(List<String> userType) {
         this.userType = userType;
     }
+    
+    @JsonProperty("fullName")
+	public String getFullName() {
+		return fullName;
+	}
+    
+    @JsonProperty("fullName")
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 }
