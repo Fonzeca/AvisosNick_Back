@@ -1,5 +1,6 @@
 package com.mindia.avisosnick.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,15 @@ public class TypeManager {
 	/**
 	 * Se utiliza para listar los tipos de usuario disponibles
 	 */
-	public List<UserType> getTypes(){
-		return repo.getAllTypes();
+	public List<PojoUserType> getTypes(){
+		List<PojoUserType> pojos= new ArrayList<PojoUserType>();
+		for (UserType type : repo.getAllTypes()) {
+			PojoUserType pojo= new PojoUserType();
+			pojo.setCode(type.getCode());
+			pojo.setDescription(type.getDescription());
+			pojos.add(pojo);
+		}
+		return pojos;
 	}
 	/**
 	 * Se modifica la descripción de un tipo de usuario
@@ -63,7 +71,7 @@ public class TypeManager {
 	 * @return
 	 */
 	public boolean typeExist(String code) {
-		for(UserType type:getTypes()) {
+		for(UserType type:repo.getAllTypes()) {
 			if(type.getCode().equals(code)) {
 				return true;
 			}

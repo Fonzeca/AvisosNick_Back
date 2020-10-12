@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindia.avisosnick.managers.TypeManager;
-import com.mindia.avisosnick.persistence.model.UserType;
 import com.mindia.avisosnick.util.Constants;
 import com.mindia.avisosnick.view.PojoUserType;
 
@@ -31,7 +30,7 @@ public class TypeController {
 	
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	@GetMapping("/allTypes")
-	public List<UserType> getTypes() {
+	public List<PojoUserType> getTypes() {
 		return manager.getTypes();
 	}
 	
