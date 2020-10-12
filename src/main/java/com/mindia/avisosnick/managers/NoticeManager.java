@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
@@ -30,16 +32,17 @@ public class NoticeManager {
 
 	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
 		PojoUser pUser = new PojoUser();
-		// TODO: crear nombre y apellido en base de datos
 		pUser.setMail(author.getEmail());
-		// pUser.setName(author.getName());
-		// pUser.setLastName(author.getLastName());
+		pUser.setFullName(author.getFullName());
 
 		Notice notice = new Notice(title, description, pUser, mails);
 		if (send) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
+				if(user.getUniqueMobileToken().equals(null)) {
+					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario "+user.getFullName()+" no posee asignado un token al cual enviar notificaciones.");
+				}
 				tokens.add(user.getUniqueMobileToken());
 				System.out.println(user.getUniqueMobileToken());
 			}
@@ -55,6 +58,7 @@ public class NoticeManager {
 				// See the BatchResponse reference documentation
 				// for the contents of response.
 				System.out.println(response.getSuccessCount() + " messages were sent successfully");
+				System.out.println("\nand "+response.getFailureCount()+" messages were not send.");
 			} catch (FirebaseMessagingException e) {
 				e.printStackTrace();
 			}
