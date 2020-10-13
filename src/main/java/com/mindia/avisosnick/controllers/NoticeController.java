@@ -25,12 +25,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.mindia.avisosnick.managers.NoticeManager;
 import com.mindia.avisosnick.managers.UserManager;
-import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
 import com.mindia.avisosnick.view.PojoCreateNotice;
 import com.mindia.avisosnick.view.PojoId;
 import com.mindia.avisosnick.view.PojoModifyNotice;
+import com.mindia.avisosnick.view.PojoNotice;
 
 @RestController
 @RequestMapping("/notice")
@@ -80,13 +80,13 @@ public class NoticeController {
 
 	@GetMapping("/checkNotices")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")
-	public List<Notice> noticesByUser(Authentication authentication){
+	public List<PojoNotice> noticesByUser(Authentication authentication){
 		return manager.getNoticesByUser((String)authentication.getPrincipal());
 	}
 	
 	@PreAuthorize("hasRole('\" + Constants.ROLE_ADMIN + \"') OR hasRole('\" + Constants.ROLE_USER + \"')")
 	@GetMapping("/get")
-	public Notice getNoticeById(@RequestParam String id) {
+	public PojoNotice getNoticeById(@RequestParam String id) {
 		return manager.getNotice(id);
 	}
 	

@@ -18,6 +18,7 @@ import com.google.firebase.messaging.MulticastMessage;
 import com.mindia.avisosnick.persistence.NoticeRepository;
 import com.mindia.avisosnick.persistence.model.Notice;
 import com.mindia.avisosnick.persistence.model.User;
+import com.mindia.avisosnick.view.PojoNotice;
 import com.mindia.avisosnick.view.PojoUser;
 
 @Service
@@ -96,20 +97,36 @@ public class NoticeManager {
 
 	}
 
-	public List<Notice> getNoticesByUser(String mail) {
-		List<Notice> noticesForUser = new ArrayList<Notice>();
+	public List<PojoNotice> getNoticesByUser(String mail) {
+		List<PojoNotice> noticesForUser = new ArrayList<PojoNotice>();
 		for (Notice notice : nRepo.getAllNotices()) {
 			for (String userMail : notice.getNotifiedUsers()) {
 				if (userMail.equals(mail)) {
-					noticesForUser.add(notice);
+					PojoNotice pojo= new PojoNotice();
+					pojo.setId(notice.getId().toString());
+					pojo.setTitle(notice.getTitle());
+					pojo.setDescription(notice.getDescription());
+					pojo.setAuthor(notice.getAutor().getFullName());
+					pojo.setCreationDate(notice.getCreationDate().toString());
+					
+					
+					noticesForUser.add(pojo);
 				}
 			}
 		}
 		return noticesForUser;
 	}
 
-	public Notice getNotice(String id) {
-		return nRepo.getNoticeById(new ObjectId(id));
+	public PojoNotice getNotice(String id) {
+		Notice n =nRepo.getNoticeById(new ObjectId(id));
+		PojoNotice pojo= new PojoNotice();
+		pojo.setId(n.getId().toString());
+		pojo.setTitle(n.getTitle());
+		pojo.setDescription(n.getDescription());
+		pojo.setAuthor(n.getAutor().getFullName());
+		pojo.setCreationDate(n.getCreationDate().toString());
+		
+		return pojo;
 	}
 
 }
