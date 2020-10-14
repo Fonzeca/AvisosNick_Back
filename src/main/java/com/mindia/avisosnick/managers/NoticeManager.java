@@ -114,7 +114,7 @@ public class NoticeManager {
 					
 					Date dateNotice = notice.getCreationDate();
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-					sdf.setTimeZone(TimeZone.getDefault());
+					sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
 					
 					pojo.setCreationDate(sdf.format(dateNotice));
 
