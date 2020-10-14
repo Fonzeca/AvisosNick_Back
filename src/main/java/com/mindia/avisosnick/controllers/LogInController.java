@@ -14,35 +14,33 @@ import com.mindia.avisosnick.security.SecurityConfig;
 
 @RestController
 public class LogInController {
-	
+
 	@Autowired
 	UserManager userManager;
 
 	@PostMapping("/login")
 	public String LogIn(@RequestParam("email") String email, @RequestParam("password") String pwd) {
 		User user = userManager.validateLogIn(email, pwd);
-		
+
 		String token = SecurityConfig.getJWTToken(user);
 		return token;
 	}
-	
+
 	@PreAuthorize("permitAll()")
 	@PostMapping("/loginWithGoogle")
 	public String LogIn(@RequestParam("idToken") String idToken) {
 		User user = userManager.validateLogInGoogle(idToken);
-		
-		
+
 		String token = SecurityConfig.getJWTTokenWithOAuth(user);
 		return token;
 	}
-	
+
 	@PreAuthorize("permitAll()")
 	@GetMapping("/validateToken")
 	public boolean ValidateToken(Authentication auth) {
 		return auth.isAuthenticated();
 	}
-	
-	
+
 //	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER')")
 //	@PostMapping("/register")
 //	public void SignUp(@RequestBody VUser vUser) {

@@ -35,29 +35,30 @@ import com.mindia.avisosnick.view.PojoNotice;
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
-	
+
 	@Autowired
 	NoticeManager manager;
-	
+
 	@Autowired
 	UserManager userManager;
 
 	@PostMapping("/create")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	public void createNotice(@RequestBody PojoCreateNotice pojo, Authentication authentication) {
-		List<User> lstUsers = userManager.getAllUsersByEmails(Arrays.asList((String)authentication.getPrincipal()));
-		
-		if(lstUsers == null || lstUsers.size() == 0 || lstUsers.size() > 1) {
+		List<User> lstUsers = userManager.getAllUsersByEmails(Arrays.asList((String) authentication.getPrincipal()));
+
+		if (lstUsers == null || lstUsers.size() == 0 || lstUsers.size() > 1) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid author.");
 		}
-		
-		manager.createNotice(pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(), lstUsers.get(0));
+
+		manager.createNotice(pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(),
+				lstUsers.get(0));
 	}
 
 	@PostMapping("/markAsRead")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")
 	public void markNoticeAsRead(@RequestBody PojoId idNotice, Authentication authentication) {
-		manager.markAsRead((String)authentication.getPrincipal(), new ObjectId(idNotice.getId()));
+		manager.markAsRead((String) authentication.getPrincipal(), new ObjectId(idNotice.getId()));
 	}
 
 	@PostMapping("/deactivate")
@@ -69,35 +70,36 @@ public class NoticeController {
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	public void modifyNotice(@RequestBody PojoModifyNotice modifyNotice) {
-		manager.modify(new ObjectId(modifyNotice.getIdNotice()), modifyNotice.getTitle(), modifyNotice.getDescription());
+		manager.modify(new ObjectId(modifyNotice.getIdNotice()), modifyNotice.getTitle(),
+				modifyNotice.getDescription());
 	}
-	
+
 	@PostMapping("/readedBy")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
-	public List<String> getReaders(@RequestBody PojoId idNotice){
+	public List<String> getReaders(@RequestBody PojoId idNotice) {
 		return manager.getReaders(new ObjectId(idNotice.getId()));
 	}
 
 	@GetMapping("/checkNotices")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")
-	public List<PojoNotice> noticesByUser(Authentication authentication){
-		return manager.getNoticesByUser((String)authentication.getPrincipal());
+	public List<PojoNotice> noticesByUser(Authentication authentication) {
+		return manager.getNoticesByUser((String) authentication.getPrincipal());
 	}
-	
+
 	@PreAuthorize("hasRole('\" + Constants.ROLE_ADMIN + \"') OR hasRole('\" + Constants.ROLE_USER + \"')")
 	@GetMapping("/get")
 	public PojoNotice getNoticeById(@RequestParam String id) {
 		return manager.getNotice(id);
 	}
-	
+
 	@PostConstruct
 	private void firebaseLogIn() {
-		//TODO: sacar esto a otro lado
+		// TODO: sacar esto a otro lado
 		try {
-			
-			InputStream serviceAccount =
-					getClass().getResourceAsStream("/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
-					
+
+			InputStream serviceAccount = getClass()
+					.getResourceAsStream("/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
+
 //					new FileInputStream(
 //					"src/main/resources/avisosnick-firebase-adminsdk-ln9j6-55140aa5db.json");
 

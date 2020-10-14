@@ -1,7 +1,10 @@
 package com.mindia.avisosnick.managers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +44,9 @@ public class NoticeManager {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
-				if(user.getUniqueMobileToken().equals(null)) {
-					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario "+user.getFullName()+" no posee asignado un token al cual enviar notificaciones.");
+				if (user.getUniqueMobileToken().equals(null)) {
+					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario " + user.getFullName()
+							+ " no posee asignado un token al cual enviar notificaciones.");
 				}
 				tokens.add(user.getUniqueMobileToken());
 				System.out.println(user.getUniqueMobileToken());
@@ -59,7 +63,7 @@ public class NoticeManager {
 				// See the BatchResponse reference documentation
 				// for the contents of response.
 				System.out.println(response.getSuccessCount() + " messages were sent successfully");
-				System.out.println("\nand "+response.getFailureCount()+" messages were not send.");
+				System.out.println("\nand " + response.getFailureCount() + " messages were not send.");
 			} catch (FirebaseMessagingException e) {
 				e.printStackTrace();
 			}
@@ -102,14 +106,18 @@ public class NoticeManager {
 		for (Notice notice : nRepo.getAllNotices()) {
 			for (String userMail : notice.getNotifiedUsers()) {
 				if (userMail.equals(mail)) {
-					PojoNotice pojo= new PojoNotice();
+					PojoNotice pojo = new PojoNotice();
 					pojo.setId(notice.getId().toString());
 					pojo.setTitle(notice.getTitle());
 					pojo.setDescription(notice.getDescription());
 					pojo.setAuthor(notice.getAuthor().getFullName());
-					pojo.setCreationDate(notice.getCreationDate().toString());
 					
+					Date dateNotice = notice.getCreationDate();
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+					sdf.setTimeZone(TimeZone.getDefault());
 					
+					pojo.setCreationDate(sdf.format(dateNotice));
+
 					noticesForUser.add(pojo);
 				}
 			}
@@ -118,14 +126,14 @@ public class NoticeManager {
 	}
 
 	public PojoNotice getNotice(String id) {
-		Notice n =nRepo.getNoticeById(new ObjectId(id));
-		PojoNotice pojo= new PojoNotice();
+		Notice n = nRepo.getNoticeById(new ObjectId(id));
+		PojoNotice pojo = new PojoNotice();
 		pojo.setId(n.getId().toString());
 		pojo.setTitle(n.getTitle());
 		pojo.setDescription(n.getDescription());
 		pojo.setAuthor(n.getAuthor().getFullName());
 		pojo.setCreationDate(n.getCreationDate().toString());
-		
+
 		return pojo;
 	}
 

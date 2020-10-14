@@ -316,6 +316,6 @@ public class UserManager {
 				return pojo;
 			}
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ningún usuario resgistrado.");
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ningï¿½n usuario resgistrado.");
 	}
 }

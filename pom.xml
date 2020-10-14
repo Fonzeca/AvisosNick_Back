@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>AvisosNick_Back</groupId>
 	<artifactId>AvisosNick_Back</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>AvisosNick_Back</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -92,5 +92,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>${artifactId}-${version}</finalName>
 	</build>
 </project>
