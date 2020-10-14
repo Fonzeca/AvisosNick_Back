@@ -106,7 +106,7 @@ public class NoticeManager {
 					pojo.setId(notice.getId().toString());
 					pojo.setTitle(notice.getTitle());
 					pojo.setDescription(notice.getDescription());
-					pojo.setAuthor(notice.getAutor().getFullName());
+					pojo.setAuthor(notice.getAuthor().getFullName());
 					pojo.setCreationDate(notice.getCreationDate().toString());
 					
 					
@@ -123,7 +123,7 @@ public class NoticeManager {
 		pojo.setId(n.getId().toString());
 		pojo.setTitle(n.getTitle());
 		pojo.setDescription(n.getDescription());
-		pojo.setAuthor(n.getAutor().getFullName());
+		pojo.setAuthor(n.getAuthor().getFullName());
 		pojo.setCreationDate(n.getCreationDate().toString());
 		
 		return pojo;

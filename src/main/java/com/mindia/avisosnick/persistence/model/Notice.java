@@ -49,11 +49,11 @@ public class Notice {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public PojoUser getAutor() {
+	public PojoUser getAuthor() {
 		return author;
 	}
-	public void setAutor(PojoUser autor) {
-		this.author = autor;
+	public void setAuthor(PojoUser author) {
+		this.author = author;
 	}
 	public List<String> getNotifiedUsers() {
 		return notifiedUsers;
