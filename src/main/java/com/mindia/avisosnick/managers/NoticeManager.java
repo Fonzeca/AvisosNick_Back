@@ -1,6 +1,8 @@
 package com.mindia.avisosnick.managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -41,8 +43,9 @@ public class NoticeManager {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
-				if(user.getUniqueMobileToken().equals(null)) {
-					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario "+user.getFullName()+" no posee asignado un token al cual enviar notificaciones.");
+				if (user.getUniqueMobileToken().equals(null)) {
+					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario " + user.getFullName()
+							+ " no posee asignado un token al cual enviar notificaciones.");
 				}
 				tokens.add(user.getUniqueMobileToken());
 				System.out.println(user.getUniqueMobileToken());
@@ -59,7 +62,7 @@ public class NoticeManager {
 				// See the BatchResponse reference documentation
 				// for the contents of response.
 				System.out.println(response.getSuccessCount() + " messages were sent successfully");
-				System.out.println("\nand "+response.getFailureCount()+" messages were not send.");
+				System.out.println("\nand " + response.getFailureCount() + " messages were not send.");
 			} catch (FirebaseMessagingException e) {
 				e.printStackTrace();
 			}
@@ -102,14 +105,13 @@ public class NoticeManager {
 		for (Notice notice : nRepo.getAllNotices()) {
 			for (String userMail : notice.getNotifiedUsers()) {
 				if (userMail.equals(mail)) {
-					PojoNotice pojo= new PojoNotice();
+					PojoNotice pojo = new PojoNotice();
 					pojo.setId(notice.getId().toString());
 					pojo.setTitle(notice.getTitle());
 					pojo.setDescription(notice.getDescription());
 					pojo.setAuthor(notice.getAuthor().getFullName());
 					pojo.setCreationDate(notice.getCreationDate().toString());
-					
-					
+
 					noticesForUser.add(pojo);
 				}
 			}
@@ -118,15 +120,40 @@ public class NoticeManager {
 	}
 
 	public PojoNotice getNotice(String id) {
-		Notice n =nRepo.getNoticeById(new ObjectId(id));
-		PojoNotice pojo= new PojoNotice();
+		Notice n = nRepo.getNoticeById(new ObjectId(id));
+		PojoNotice pojo = new PojoNotice();
 		pojo.setId(n.getId().toString());
 		pojo.setTitle(n.getTitle());
 		pojo.setDescription(n.getDescription());
 		pojo.setAuthor(n.getAuthor().getFullName());
 		pojo.setCreationDate(n.getCreationDate().toString());
-		
+
 		return pojo;
+	}
+
+	public List<PojoNotice> getNotices() {
+		List<PojoNotice> pojoNotices = new ArrayList<PojoNotice>();
+		List<Notice> notices=nRepo.getAllNotices();
+		Collections.sort(notices, new SortbyDate());
+
+		for (Notice notice : notices) {
+			PojoNotice pojo = new PojoNotice();
+			pojo.setAuthor(notice.getAuthor().getFullName());
+			pojo.setCreationDate(notice.getCreationDate().toString());
+			pojo.setDescription(notice.getDescription());
+			pojo.setId(notice.getId().toString());
+			pojo.setTitle(notice.getTitle());
+
+			pojoNotices.add(pojo);
+		}
+		return pojoNotices;
+	}
+
+	class SortbyDate implements Comparator<Notice> {
+		public int compare(Notice a, Notice b) 
+	    { 
+	        return a.getCreationDate().compareTo(b.getCreationDate());
+	    }
 	}
 
 }
