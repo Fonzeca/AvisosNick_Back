@@ -135,6 +135,7 @@ public class NoticeManager {
 		List<PojoNotice> pojoNotices = new ArrayList<PojoNotice>();
 		List<Notice> notices=nRepo.getAllNotices();
 		Collections.sort(notices, new SortbyDate());
+		Collections.reverse(notices);
 
 		for (Notice notice : notices) {
 			PojoNotice pojo = new PojoNotice();
