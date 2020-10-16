@@ -2,6 +2,8 @@ package com.mindia.avisosnick.managers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -135,6 +137,32 @@ public class NoticeManager {
 		pojo.setCreationDate(n.getCreationDate().toString());
 
 		return pojo;
+	}
+
+	public List<PojoNotice> getNotices() {
+		List<PojoNotice> pojoNotices = new ArrayList<PojoNotice>();
+		List<Notice> notices=nRepo.getAllNotices();
+		Collections.sort(notices, new SortbyDate());
+		Collections.reverse(notices);
+
+		for (Notice notice : notices) {
+			PojoNotice pojo = new PojoNotice();
+			pojo.setAuthor(notice.getAuthor().getFullName());
+			pojo.setCreationDate(notice.getCreationDate().toString());
+			pojo.setDescription(notice.getDescription());
+			pojo.setId(notice.getId().toString());
+			pojo.setTitle(notice.getTitle());
+
+			pojoNotices.add(pojo);
+		}
+		return pojoNotices;
+	}
+
+	class SortbyDate implements Comparator<Notice> {
+		public int compare(Notice a, Notice b) 
+	    { 
+	        return a.getCreationDate().compareTo(b.getCreationDate());
+	    }
 	}
 
 }
