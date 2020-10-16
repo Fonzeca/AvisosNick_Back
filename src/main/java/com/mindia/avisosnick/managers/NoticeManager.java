@@ -102,7 +102,10 @@ public class NoticeManager {
 
 	public List<PojoNotice> getNoticesByUser(String mail) {
 		List<PojoNotice> noticesForUser = new ArrayList<PojoNotice>();
-		for (Notice notice : nRepo.getAllNotices()) {
+		List<Notice> notices= nRepo.getAllNotices();
+		Collections.sort(notices,new SortbyDate());
+		Collections.reverse(notices);
+		for (Notice notice : notices) {
 			for (String userMail : notice.getNotifiedUsers()) {
 				if (userMail.equals(mail)) {
 					PojoNotice pojo = new PojoNotice();
