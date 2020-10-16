@@ -86,7 +86,7 @@ public class NoticeController {
 		return manager.getNoticesByUser((String) authentication.getPrincipal());
 	}
 	
-	@GetMapping("/getNotices")
+	@GetMapping("/getAll")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
 	public List<PojoNotice> getAllNotices(){
 		return manager.getNotices();
