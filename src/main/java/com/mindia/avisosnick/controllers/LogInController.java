@@ -28,8 +28,17 @@ public class LogInController {
 
 	@PreAuthorize("permitAll()")
 	@PostMapping("/loginWithGoogle")
-	public String LogIn(@RequestParam("idToken") String idToken) {
+	public String LogInGoogle(@RequestParam("idToken") String idToken) {
 		User user = userManager.validateLogInGoogle(idToken);
+
+		String token = SecurityConfig.getJWTTokenWithOAuth(user);
+		return token;
+	}
+	
+	@PreAuthorize("permitAll()")
+	@PostMapping("/loginWithFacebook")
+	public String LogInFacebook(@RequestParam("idToken") String accessToken) {
+		User user = userManager.validateLogInFacebook(accessToken);
 
 		String token = SecurityConfig.getJWTTokenWithOAuth(user);
 		return token;

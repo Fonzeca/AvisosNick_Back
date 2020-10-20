@@ -10,7 +10,9 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -18,12 +20,15 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mindia.avisosnick.persistence.UserRepository;
 import com.mindia.avisosnick.persistence.model.AuthUser;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.util.Constants;
 import com.mindia.avisosnick.view.PojoUser;
 import com.mindia.avisosnick.view.VUser;
+
 
 @Service
 public class UserManager {
@@ -174,6 +179,7 @@ public class UserManager {
 						// Si sale todo bien, actualizamos los datos
 						user.getAuth().setExpirationLastIdToken(expirationTime);
 						user.getAuth().setLastIdToken(idTokenString);
+						repo.createUser(user);
 					} else {
 						// Si no tiene el Auth, no se dejara iniciar sesion.
 						throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -193,6 +199,95 @@ public class UserManager {
 		}
 
 	}
+	
+	/**
+	 * Se utiliza para validar el inicio de sesion de un usuario por OAuth Facebook
+	 * TODO: refactorizar metodo
+	 */
+	public User validateLogInFacebook(String accessToken) {
+		final String FACEBOOK_OAUTH_GRAPH_VERSION = "v8.0";
+		
+		RestTemplate rest = new RestTemplate();
+		
+		ResponseEntity<String> response = rest.getForEntity("https://graph.facebook.com/" + FACEBOOK_OAUTH_GRAPH_VERSION + "/debug_token?input_token=" + accessToken + "&access_token=" + accessToken, String.class);
+		
+		String userEmail = null;
+		String userId = null;
+		long expiresAt = -1;
+		
+		try {
+			JsonObject validationData = JsonParser.parseString(response.getBody()).getAsJsonObject().get("data").getAsJsonObject();
+			boolean isValid = validationData.get("is_valid").getAsBoolean();
+			
+			if(isValid) {
+				
+				userId = validationData.get("user_id").getAsString();
+				expiresAt = validationData.get("expires_at").getAsLong();
+				
+				ResponseEntity<String> responseData = rest.getForEntity("https://graph.facebook.com/" + FACEBOOK_OAUTH_GRAPH_VERSION + "/"+ userId + 
+																		"?access_token=" + accessToken + 
+																		"&fields=email,name", String.class);
+				
+				JsonObject userData = JsonParser.parseString(responseData.getBody()).getAsJsonObject();
+				userEmail = userData.get("email").getAsString();
+				
+			}else {
+				return null;
+			}
+			
+			
+		} catch (Exception e) {
+			return null;
+		}
+		
+		
+		// TODO: sacar las validacinoes de usuario a otra funcion
+		User user = repo.getUserByEmail(userEmail);
+		if (user == null) {
+			// Si no existe el usuario, se crea en base de datos
+			user = new User();
+
+			user.setEmail(userEmail);
+			user.setRoles(Arrays.asList(Constants.ROLE_USER));
+
+			AuthUser authUser = new AuthUser();
+			authUser.setLastIdToken(accessToken);
+			authUser.setProvider(Constants.OAUTH_PROVIDER_FACEBOOK);
+			authUser.setUserId(userId);
+			authUser.setExpirationLastIdToken(expiresAt);
+
+			user.setAuth(authUser);
+
+			// Se guarda el usuario con el auth puesto
+			repo.createUser(user);
+		} else {
+			// Si el usuario existe, verifica que inicia sesion con Auth
+			if (user.getAuth() != null) {
+				// Verificamos los datos
+				if (!user.getAuth().getProvider().equals(Constants.OAUTH_PROVIDER_FACEBOOK)) {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"El usuario no tiene asociado este metodo de inicio de sesion.");
+				}
+
+				if (!user.getAuth().getUserId().equals(userId)) {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"El inicio de sesion de Facebook no corresponde al usuario.");
+				}
+
+				// Si sale todo bien, actualizamos los datos
+				user.getAuth().setExpirationLastIdToken(expiresAt);
+				user.getAuth().setLastIdToken(accessToken);
+				repo.createUser(user);
+			} else {
+				// Si no tiene el Auth, no se dejara iniciar sesion.
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+						"El usuario no tiene asociado este metodo de inicio de sesion.");
+			}
+		}
+		
+		return user;
+	}
+	
 
 	/**
 	 * Se aplican los cambios normales que cualquier usuario puede hacer. Por ahora
