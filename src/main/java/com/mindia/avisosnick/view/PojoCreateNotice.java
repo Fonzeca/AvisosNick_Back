@@ -2,12 +2,14 @@
 package com.mindia.avisosnick.view;
 
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+	"types",
     "mails",
     "sendNotification",
     "title",
@@ -15,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class PojoCreateNotice {
 
+	@JsonProperty("types")
+	private List<String> types= null;
     @JsonProperty("mails")
     private List<String> mails = null;
     @JsonProperty("sendNotification")
@@ -23,6 +27,17 @@ public class PojoCreateNotice {
     private String title;
     @JsonProperty("description")
     private String description;
+    
+    
+    @JsonProperty("types")
+    public List<String> getTypes() {
+    	return types;
+    }
+    
+    @JsonProperty("types")
+    public void setTypes(List<String> types) {
+    	this.types = types;
+    }
 
     @JsonProperty("mails")
     public List<String> getMails() {
@@ -63,5 +78,6 @@ public class PojoCreateNotice {
     public void setDescription(String description) {
         this.description = description;
     }
+    
 
 }
