@@ -33,10 +33,18 @@ public class NoticeManager {
 
 	final private int DAYINMILLISECONDS = 86400000;// 3600 seconds * 1000 to milli * 24 hours
 
-	public void createNotice(List<String> mails, boolean send, String title, String description, User author) {
+	public void createNotice(List<String> types, List<String> mails, boolean send, String title, String description, User author) {
 		PojoUser pUser = new PojoUser();
 		pUser.setMail(author.getEmail());
 		pUser.setFullName(author.getFullName());
+		if(mails==(null) || mails.isEmpty()) {
+			mails= new ArrayList<String>();
+			for (String string : types) {
+				for (PojoUser user : uManager.getUsersByType(string)) {
+					mails.add(user.getMail());
+				};
+			}
+		}
 
 		Notice notice = new Notice(title, description, pUser, mails);
 		if (send) {
@@ -48,7 +56,6 @@ public class NoticeManager {
 							+ " no posee asignado un token al cual enviar notificaciones.");
 				}
 				tokens.add(user.getUniqueMobileToken());
-				System.out.println(user.getUniqueMobileToken());
 			}
 			MulticastMessage notification = MulticastMessage.builder()
 					.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
