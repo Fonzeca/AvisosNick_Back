@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mindia.avisosnick.managers.UserManager;
 import com.mindia.avisosnick.persistence.model.User;
 import com.mindia.avisosnick.security.SecurityConfig;
+import com.mindia.avisosnick.view.PojoLogIn;
 
 @RestController
 public class LogInController {
@@ -19,29 +20,53 @@ public class LogInController {
 	UserManager userManager;
 
 	@PostMapping("/login")
-	public String LogIn(@RequestParam("email") String email, @RequestParam("password") String pwd) {
+	public PojoLogIn LogIn(@RequestParam("email") String email, @RequestParam("password") String pwd) {
 		User user = userManager.validateLogIn(email, pwd);
 
 		String token = SecurityConfig.getJWTToken(user);
-		return token;
+
+		PojoLogIn pojo = new PojoLogIn();
+		//pojo.setFullName(user.getFullName());
+		pojo.setMail(user.getEmail());
+		pojo.setRoles(user.getRoles());
+		pojo.setUserType(user.getUserType());
+		pojo.setToken(token);
+		
+		return pojo;
 	}
 
 	@PreAuthorize("permitAll()")
 	@PostMapping("/loginWithGoogle")
-	public String LogInGoogle(@RequestParam("idToken") String idToken) {
+	public PojoLogIn LogInGoogle(@RequestParam("idToken") String idToken) {
 		User user = userManager.validateLogInGoogle(idToken);
 
 		String token = SecurityConfig.getJWTTokenWithOAuth(user);
-		return token;
+		
+		PojoLogIn pojo = new PojoLogIn();
+		//pojo.setFullName(user.getFullName());
+		pojo.setMail(user.getEmail());
+		pojo.setRoles(user.getRoles());
+		pojo.setUserType(user.getUserType());
+		pojo.setToken(token);
+		
+		return pojo;
 	}
 	
 	@PreAuthorize("permitAll()")
 	@PostMapping("/loginWithFacebook")
-	public String LogInFacebook(@RequestParam("idToken") String accessToken) {
+	public PojoLogIn LogInFacebook(@RequestParam("idToken") String accessToken) {
 		User user = userManager.validateLogInFacebook(accessToken);
 
 		String token = SecurityConfig.getJWTTokenWithOAuth(user);
-		return token;
+		
+		PojoLogIn pojo = new PojoLogIn();
+		//pojo.setFullName(user.getFullName());
+		pojo.setMail(user.getEmail());
+		pojo.setRoles(user.getRoles());
+		pojo.setUserType(user.getUserType());
+		pojo.setToken(token);
+		
+		return pojo;
 	}
 
 	@PreAuthorize("permitAll()")
