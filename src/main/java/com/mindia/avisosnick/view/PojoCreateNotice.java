@@ -2,7 +2,6 @@
 package com.mindia.avisosnick.view;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,8 +28,8 @@ public class PojoCreateNotice {
     private String title;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("dataMap")
-    private Map<String,String> dataMap;
+    @JsonProperty("data")
+    private PojoAditionalProperties data = null;
     
     
     @JsonProperty("types")
@@ -83,15 +82,14 @@ public class PojoCreateNotice {
         this.description = description;
     }
 
-    @JsonProperty("dataMap")
-	public Map<String, String> getDataMap() {
-		return dataMap;
-	}
-
-    @JsonProperty("dataMap")
-	public void setDataMap(Map<String, String> dataMap) {
-		this.dataMap = dataMap;
+    @JsonProperty("data")
+	public PojoAditionalProperties getData() {
+		return data;
 	}
     
+    @JsonProperty("data")
+	public void setData(PojoAditionalProperties data) {
+		this.data = data;
+	}
 
 }
