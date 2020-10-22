@@ -41,12 +41,13 @@ public class NoticeManager {
 		PojoUser pUser = new PojoUser();
 		pUser.setMail(author.getEmail());
 		pUser.setFullName(author.getFullName());
-		if(mails==(null) || mails.isEmpty()) {
-			mails= new ArrayList<String>();
+		if (mails == (null) || mails.isEmpty()) {
+			mails = new ArrayList<String>();
 			for (String string : types) {
 				for (PojoUser user : uManager.getUsersByType(string)) {
 					mails.add(user.getMail());
-				};
+				}
+				;
 			}
 		}
 
@@ -62,14 +63,14 @@ public class NoticeManager {
 				tokens.add(user.getUniqueMobileToken());
 			}
 			MulticastMessage notification = MulticastMessage.builder()
-					
-					//Data needed by the app
+
+					// Data needed by the app
 					.putAllData(dataMap)
 					
 					.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
-							.setPriority(AndroidConfig.Priority.NORMAL)
-							.setNotification(AndroidNotification.builder().setTitle(title).setBody(description).build())
-							.build())
+									  .setPriority(AndroidConfig.Priority.NORMAL)
+									  .setNotification(AndroidNotification.builder().setTitle(title).setBody(description).build())
+									  .build())
 					.addAllTokens(tokens).build();
 			BatchResponse response;
 			try {
@@ -117,8 +118,8 @@ public class NoticeManager {
 
 	public List<PojoNotice> getNoticesByUser(String mail) {
 		List<PojoNotice> noticesForUser = new ArrayList<PojoNotice>();
-		List<Notice> notices= nRepo.getAllNotices();
-		Collections.sort(notices,new SortbyDate());
+		List<Notice> notices = nRepo.getAllNotices();
+		Collections.sort(notices, new SortbyDate());
 		Collections.reverse(notices);
 		for (Notice notice : notices) {
 			for (String userMail : notice.getNotifiedUsers()) {
@@ -128,11 +129,11 @@ public class NoticeManager {
 					pojo.setTitle(notice.getTitle());
 					pojo.setDescription(notice.getDescription());
 					pojo.setAuthor(notice.getAuthor().getFullName());
-					
+
 					Date dateNotice = notice.getCreationDate();
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 					sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
-					
+
 					pojo.setCreationDate(sdf.format(dateNotice));
 
 					noticesForUser.add(pojo);
@@ -156,7 +157,7 @@ public class NoticeManager {
 
 	public List<PojoNotice> getNotices() {
 		List<PojoNotice> pojoNotices = new ArrayList<PojoNotice>();
-		List<Notice> notices=nRepo.getAllNotices();
+		List<Notice> notices = nRepo.getAllNotices();
 		Collections.sort(notices, new SortbyDate());
 		Collections.reverse(notices);
 
@@ -174,10 +175,9 @@ public class NoticeManager {
 	}
 
 	class SortbyDate implements Comparator<Notice> {
-		public int compare(Notice a, Notice b) 
-	    { 
-	        return a.getCreationDate().compareTo(b.getCreationDate());
-	    }
+		public int compare(Notice a, Notice b) {
+			return a.getCreationDate().compareTo(b.getCreationDate());
+		}
 	}
 
 }

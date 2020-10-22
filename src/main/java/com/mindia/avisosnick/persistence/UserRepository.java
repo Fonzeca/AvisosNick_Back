@@ -19,6 +19,7 @@ public class UserRepository {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
+	//CREATE
 	public void createUser(User user) {
 		try {
 			mongoTemplate.save(user);
@@ -27,14 +28,25 @@ public class UserRepository {
 		}
 	}
 	
-	
-	public User getUserByEmail(String email) {
-		Query query = new Query(where("email").is(email));
+	//GET BY EMAIL
+	public User getUserByEmail(String email, boolean incluyeDesactivados) {
+		Query query = new Query();
+		
+		query.addCriteria(where("email").is(email));
+		
+		if(!incluyeDesactivados) {
+			query.addCriteria(where("active").is(true));
+		}
 		
 		User user = mongoTemplate.findOne(query, User.class);
 		return user;
 	}
 	
+	public User getUserByEmail(String email) {
+		return getUserByEmail(email, false);
+	}
+	
+	//UPDATE
 	public void updateUser(User user) {
 		try {
 			Query query = new Query(where("_id").is(user.getId()));
@@ -51,10 +63,18 @@ public class UserRepository {
 		}
 	}
 
-
-	public List<User> getUsers() {
-		return mongoTemplate.findAll(User.class);
+	//GET ALL
+	public List<User> getUsers(boolean incluyeDesactivados) {
+		Query query = new Query();
+		
+		if(!incluyeDesactivados) {
+			query.addCriteria(where("active").is(true));
+		}
+		return mongoTemplate.find(query, User.class);
 	}
 
-
+	public List<User> getUsers() {
+		return getUsers(false);
+	}
+	
 }

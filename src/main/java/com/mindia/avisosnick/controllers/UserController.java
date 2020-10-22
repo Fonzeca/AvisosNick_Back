@@ -43,10 +43,10 @@ public class UserController {
 		userManager.modifyMyUser(user);
 	}
 
-	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
-	@PostMapping("/desactivate")
-	public void desactivateUser(String email) {
-		// TODO: realizar las modificaciones para esta accion
+	@PreAuthorize(Constants.IS_ADMIN)
+	@PostMapping("/setActive")
+	public void desactivateUser(@RequestParam("email") String email, @RequestParam("active") boolean active) {
+		userManager.setActiveUser(email, active);
 	}
 
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")

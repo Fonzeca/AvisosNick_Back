@@ -117,11 +117,37 @@ public class UserManager {
 	}
 
 	/**
+	 * Se aplican los cambios normales que cualquier usuario puede hacer. Por ahora
+	 * cualquier usuario puede cambiarse la contraseña.
+	 */
+	private User applyModification(VUser vUser) {
+		// Buscamos por mail el usuario
+		User user = repo.getUserByEmail(vUser.getEmail());
+		
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.");
+		}
+
+		user.setPasswordHash(vUser.getPassword());
+		user.setFullName(vUser.getFullName());
+
+		return user;
+	}
+
+	/**
 	 * Se utiliza para validar el inicio de sesion de un usuario
 	 */
 	public User validateLogIn(String email, String password) {
-		User user = repo.getUserByEmail(email);
-
+		User user = repo.getUserByEmail(email, true);
+		
+		
+		//Verificamos que no este desactivado el usuario
+		if(!user.isActive()) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+					"El usuario esta desactivado.");
+		}
+		
+		
 		if (!user.getPasswordHash().equals(password)) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email y/o contraseña incorrecta.");
 		}
@@ -144,7 +170,7 @@ public class UserManager {
 				Long expirationTime = payload.getExpirationTimeSeconds();
 
 				// TODO: sacar las validacinoes de usuario a otra funcion
-				User user = repo.getUserByEmail(email);
+				User user = repo.getUserByEmail(email, true);
 				if (user == null) {
 					// Si no existe el usuario, se crea en base de datos
 					user = new User();
@@ -163,6 +189,12 @@ public class UserManager {
 					// Se guarda el usuario con el auth puesto
 					repo.createUser(user);
 				} else {
+					//Verificamos que no este desactivado el usuario
+					if(!user.isActive()) {
+						throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+								"El usuario esta desactivado.");
+					}
+					
 					// Si el usuario existe, verifica que inicia sesion con Auth
 					if (user.getAuth() != null) {
 						// Verificamos los datos
@@ -242,7 +274,7 @@ public class UserManager {
 		
 		
 		// TODO: sacar las validacinoes de usuario a otra funcion
-		User user = repo.getUserByEmail(userEmail);
+		User user = repo.getUserByEmail(userEmail, true);
 		if (user == null) {
 			// Si no existe el usuario, se crea en base de datos
 			user = new User();
@@ -261,6 +293,12 @@ public class UserManager {
 			// Se guarda el usuario con el auth puesto
 			repo.createUser(user);
 		} else {
+			//Verificamos que no este desactivado el usuario
+			if(!user.isActive()) {
+				throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+						"El usuario esta desactivado.");
+			}
+			
 			// Si el usuario existe, verifica que inicia sesion con Auth
 			if (user.getAuth() != null) {
 				// Verificamos los datos
@@ -288,25 +326,6 @@ public class UserManager {
 		return user;
 	}
 	
-
-	/**
-	 * Se aplican los cambios normales que cualquier usuario puede hacer. Por ahora
-	 * cualquier usuario puede cambiarse la contraseña.
-	 */
-	private User applyModification(VUser vUser) {
-		// Buscamos por mail el usuario
-		User user = repo.getUserByEmail(vUser.getEmail());
-
-		if (user == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.");
-		}
-
-		user.setPasswordHash(vUser.getPassword());
-		user.setFullName(vUser.getFullName());
-
-		return user;
-	}
-
 	/**
 	 * Se asocia un token con un usuario, para esto se pide el mail del usuario y el
 	 * token a asignar.
@@ -371,7 +390,7 @@ public class UserManager {
 		if (!typeManager.typeExist(newTypeCode)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de usuario no encontrado.");
 		} else {
-
+			//TODO: Validar si el usuario es null
 			User user = repo.getUserByEmail(mail);
 			List<String> types = user.getUserType();
 			types.add(newTypeCode);
@@ -403,8 +422,13 @@ public class UserManager {
 	 * @return un usuario o null en caso de no encontrarlo.
 	 */
 	public PojoUser getUserByMail(String mail) {
+		//TODO: aca se esta usando un getUsers, cuando ya hay un repo.getUserByEmail.
 		for (User user : repo.getUsers()) {
 			if (user.getEmail().equals(mail)) {
+				if(!user.isActive()) {
+					throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "El usuario se encuentra desactivado.");
+				}
+				
 				PojoUser pojo= new PojoUser();
 				pojo.setFullName(user.getFullName());
 				pojo.setMail(mail);
@@ -412,5 +436,20 @@ public class UserManager {
 			}
 		}
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ning�n usuario resgistrado.");
+	}
+
+	/**
+	 * Se activa o desactiva el usuario. Al desactivar, no se muestra mas por pantalla y tampoco puede loguearse
+	 * @param email de un usuario
+	 */
+	public void setActiveUser(String email, boolean active) {
+		User user = repo.getUserByEmail(email, true);
+		
+		if(user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ningún usuario resgistrado.");
+		}
+		
+		user.setActive(active);
+		repo.updateUser(user);
 	}
 }

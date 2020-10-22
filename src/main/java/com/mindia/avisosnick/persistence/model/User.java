@@ -19,6 +19,7 @@ public class User {
     private List<String> userType;
     private String fullName;
     private AuthUser auth;
+    private boolean active;
     
 	public ObjectId getId() {
 		return id;
@@ -67,5 +68,11 @@ public class User {
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

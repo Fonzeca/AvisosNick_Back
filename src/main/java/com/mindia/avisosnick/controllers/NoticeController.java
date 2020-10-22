@@ -50,8 +50,8 @@ public class NoticeController {
 		if (lstUsers == null || lstUsers.size() == 0 || lstUsers.size() > 1) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid author.");
 		}
-		
-		manager.createNotice(pojo.getTypes(),pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(), lstUsers.get(0), pojo.getDataMap());
+
+		manager.createNotice(pojo.getTypes(), pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(), lstUsers.get(0), null);
 	}
 
 	@PostMapping("/markAsRead")
@@ -84,12 +84,13 @@ public class NoticeController {
 	public List<PojoNotice> noticesByUser(Authentication authentication) {
 		return manager.getNoticesByUser((String) authentication.getPrincipal());
 	}
-	
+
 	@GetMapping("/getAll")
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
-	public List<PojoNotice> getAllNotices(){
+	public List<PojoNotice> getAllNotices() {
 		return manager.getNotices();
 	}
+
 	@PreAuthorize("hasRole('\" + Constants.ROLE_ADMIN + \"') OR hasRole('\" + Constants.ROLE_USER + \"')")
 	@GetMapping("/get")
 	public PojoNotice getNoticeById(@RequestParam String id) {
