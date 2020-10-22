@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.bson.types.ObjectId;
@@ -36,7 +37,7 @@ public class NoticeManager {
 
 	final private int DAYINMILLISECONDS = 86400000;// 3600 seconds * 1000 to milli * 24 hours
 
-	public void createNotice(List<String> types, List<String> mails, boolean send, String title, String description, User author) {
+	public void createNotice(List<String> types, List<String> mails, boolean send, String title, String description, User author, Map<String, String> dataMap) {
 		PojoUser pUser = new PojoUser();
 		pUser.setMail(author.getEmail());
 		pUser.setFullName(author.getFullName());
@@ -61,6 +62,10 @@ public class NoticeManager {
 				tokens.add(user.getUniqueMobileToken());
 			}
 			MulticastMessage notification = MulticastMessage.builder()
+					
+					//Data needed by the app
+					.putAllData(dataMap)
+					
 					.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
 							.setPriority(AndroidConfig.Priority.NORMAL)
 							.setNotification(AndroidNotification.builder().setTitle(title).setBody(description).build())

@@ -51,7 +51,7 @@ public class NoticeController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid author.");
 		}
 		
-		manager.createNotice(pojo.getTypes(),pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(), lstUsers.get(0));
+		manager.createNotice(pojo.getTypes(),pojo.getMails(), pojo.isSendNotification(), pojo.getTitle(), pojo.getDescription(), lstUsers.get(0), pojo.getDataMap());
 	}
 
 	@PostMapping("/markAsRead")
