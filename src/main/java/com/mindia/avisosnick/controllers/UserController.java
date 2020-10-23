@@ -81,9 +81,9 @@ public class UserController {
 		userManager.removeType(pojo.getString1(), pojo.getString2());
 	}
 
-	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "')")
+	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR #authentication.principal == #mail")
 	@GetMapping("/getUserByMail")
-	public PojoUser getUserByMail(@RequestParam String mail) {
+	public PojoUser getUserByMail(@RequestParam String mail, Authentication authentication) {
 		return userManager.getUserByMail(mail);
 	}
 }
