@@ -140,6 +140,10 @@ public class UserManager {
 	public User validateLogIn(String email, String password) {
 		User user = repo.getUserByEmail(email, true);
 		
+		if(user == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email y/o contraseña incorrecta.");
+		}
+		
 		
 		//Verificamos que no este desactivado el usuario
 		if(!user.isActive()) {
