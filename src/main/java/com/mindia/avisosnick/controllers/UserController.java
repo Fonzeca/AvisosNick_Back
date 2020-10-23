@@ -83,7 +83,7 @@ public class UserController {
 
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR #authentication.principal == #mail")
 	@GetMapping("/getUserByMail")
-	public PojoUser getUserByMail(@RequestParam String mail, Authentication authentication) {
+	public VUser getUserByMail(@RequestParam String mail, Authentication authentication) {
 		return userManager.getUserByMail(mail);
 	}
 }

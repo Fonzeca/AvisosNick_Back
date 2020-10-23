@@ -421,21 +421,20 @@ public class UserManager {
 	 * @param mail
 	 * @return un usuario o null en caso de no encontrarlo.
 	 */
-	public PojoUser getUserByMail(String mail) {
-		//TODO: aca se esta usando un getUsers, cuando ya hay un repo.getUserByEmail.
-		for (User user : repo.getUsers()) {
-			if (user.getEmail().equals(mail)) {
-				if(!user.isActive()) {
-					throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "El usuario se encuentra desactivado.");
-				}
-				
-				PojoUser pojo= new PojoUser();
-				pojo.setFullName(user.getFullName());
-				pojo.setMail(mail);
-				return pojo;
-			}
+	public VUser getUserByMail(String mail) {
+		User user = repo.getUserByEmail(mail, true);
+		
+		if(user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ning�n usuario resgistrado.");
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El mail ingresado no corresponde con ning�n usuario resgistrado.");
+		
+		VUser vuser = new VUser();
+		vuser.setEmail(user.getEmail());
+		vuser.setFullName(user.getFullName());
+		vuser.setRoles(user.getRoles());
+		vuser.setUserType(user.getUserType());
+		
+		return vuser;
 	}
 
 	/**
