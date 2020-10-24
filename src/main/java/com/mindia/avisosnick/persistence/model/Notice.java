@@ -20,9 +20,9 @@ public class Notice {
 	private PojoUser author;
 	private List <String> notifiedUsers, readedByUsers;
 	private Date creationDate;
-	private boolean active, mobileDisp;
+	private boolean active, sendNotification;
 	
-	public Notice(String title, String description, PojoUser author, List<String> notifiedUsers) {
+	public Notice(String title, String description, PojoUser author, List<String> notifiedUsers, boolean sendNotification) {
 		this.title=title;
 		this.description=description;
 		this.author=author;
@@ -30,6 +30,7 @@ public class Notice {
 		creationDate=new Date();
 		active=true;
 		readedByUsers= new ArrayList<String>();
+		this.sendNotification=sendNotification;
 	}
 	public ObjectId getId() {
 		return id;
@@ -82,11 +83,11 @@ public class Notice {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public boolean isMobileDisp() {
-		return mobileDisp;
+	public boolean isSend() {
+		return sendNotification;
 	}
-	public void setMobileDisp(boolean mobileDisp) {
-		this.mobileDisp = mobileDisp;
+	public void setSend(boolean mobileDisp) {
+		this.sendNotification = mobileDisp;
 	}
 	
 

@@ -51,8 +51,8 @@ public class NoticeManager {
 			}
 		}
 
-		Notice notice = new Notice(title, description, pUser, mails);
-		if (send) {
+		Notice notice = new Notice(title, description, pUser, mails,send);
+		if (notice.isSend()) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
