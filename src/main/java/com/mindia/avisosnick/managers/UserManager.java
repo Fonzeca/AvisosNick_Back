@@ -128,8 +128,13 @@ public class UserManager {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado.");
 		}
 
-		user.setPasswordHash(vUser.getPassword());
-		user.setFullName(vUser.getFullName());
+		if(vUser.getPassword() != null && !vUser.getPassword().isEmpty()) {
+			user.setPasswordHash(vUser.getPassword());
+		}
+		
+		if(vUser.getFullName() != null && !vUser.getFullName().isEmpty()) {
+			user.setFullName(vUser.getFullName());
+		}
 
 		return user;
 	}
