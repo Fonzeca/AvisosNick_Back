@@ -93,9 +93,9 @@ public class UserManager {
 		User user = applyModification(vUser);
 
 		// Si se le quitan los roles o se agregan
-		if (vUser.getRoles() != null && vUser.getRoles().size() != 0) {
-			user.setRoles(vUser.getRoles());
-		}
+//		if (vUser.getRoles() != null && vUser.getRoles().size() != 0) {
+//			user.setRoles(vUser.getRoles());
+//		}
 
 		// No comprueba el tamaño del array porque puede que le quiten todos los tipos
 		// de usuario
