@@ -150,7 +150,12 @@ public class NoticeManager {
 		pojo.setTitle(n.getTitle());
 		pojo.setDescription(n.getDescription());
 		pojo.setAuthor(n.getAuthor().getFullName());
-		pojo.setCreationDate(n.getCreationDate().toString());
+		
+		Date dateNotice = n.getCreationDate();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
+
+		pojo.setCreationDate(sdf.format(dateNotice));
 
 		return pojo;
 	}
@@ -164,12 +169,17 @@ public class NoticeManager {
 		for (Notice notice : notices) {
 			PojoNotice pojo = new PojoNotice();
 			pojo.setAuthor(notice.getAuthor().getFullName());
-			pojo.setCreationDate(notice.getCreationDate().toString());
 			pojo.setDescription(notice.getDescription());
 			pojo.setId(notice.getId().toString());
 			pojo.setTitle(notice.getTitle());
 			pojo.setMails(notice.getNotifiedUsers());
 			
+			Date dateNotice = notice.getCreationDate();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
+
+			pojo.setCreationDate(sdf.format(dateNotice));
+
 			pojoNotices.add(pojo);
 		}
 		return pojoNotices;
