@@ -1,6 +1,8 @@
 
 package com.mindia.avisosnick.view;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -11,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "title",
     "description",
     "author",
-    "creationDate"
+    "creationDate",
+    "mails"
 })
 public class PojoNotice {
 
@@ -25,6 +28,8 @@ public class PojoNotice {
     private String author;
     @JsonProperty("creationDate")
     private String creationDate;
+    @JsonProperty("mails")
+    private List<String> mails;
 
     @JsonProperty("id")
     public String getId() {
@@ -75,5 +80,15 @@ public class PojoNotice {
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
+
+    @JsonProperty("mails")
+	public List<String> getMails() {
+		return mails;
+	}
+
+    @JsonProperty("mails")
+	public void setMails(List<String> mails) {
+		this.mails = mails;
+	}
 
 }

@@ -168,7 +168,8 @@ public class NoticeManager {
 			pojo.setDescription(notice.getDescription());
 			pojo.setId(notice.getId().toString());
 			pojo.setTitle(notice.getTitle());
-
+			pojo.setMails(notice.getNotifiedUsers());
+			
 			pojoNotices.add(pojo);
 		}
 		return pojoNotices;
