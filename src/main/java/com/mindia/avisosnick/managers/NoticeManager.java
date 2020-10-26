@@ -90,8 +90,14 @@ public class NoticeManager {
 
 	public void markAsRead(String mail, ObjectId idNotice) {
 		Notice notice = nRepo.getNoticeById(idNotice);
-		notice.readedByUser(mail);
-		nRepo.createNotice(notice);
+		for (String lector : notice.getReadedByUsers()) {
+			if(lector.equals(mail)) {
+				break;
+			}
+			notice.readedByUser(mail);
+			nRepo.createNotice(notice);
+		}
+		
 
 	}
 
@@ -118,6 +124,7 @@ public class NoticeManager {
 
 	public List<PojoNotice> getNoticesByUser(String mail) {
 		List<PojoNotice> noticesForUser = new ArrayList<PojoNotice>();
+		List<PojoNotice> additionalNotices = new ArrayList<PojoNotice>();
 		List<Notice> notices = nRepo.getAllNotices();
 		Collections.sort(notices, new SortbyDate());
 		Collections.reverse(notices);
@@ -135,12 +142,26 @@ public class NoticeManager {
 					sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
 
 					pojo.setCreationDate(sdf.format(dateNotice));
-
-					noticesForUser.add(pojo);
+					if(alreadyReaded(notice, userMail)) {
+						pojo.setReaded(true);
+						additionalNotices.add(pojo);
+					}else {
+						pojo.setReaded(false);
+						noticesForUser.add(pojo);
+					}
 				}
 			}
 		}
+		noticesForUser.addAll(additionalNotices);
 		return noticesForUser;
+	}
+	private boolean alreadyReaded(Notice notice, String userMail) {
+		for (String reader : notice.getReadedByUsers()) {
+			if(reader.equals(userMail)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public PojoNotice getNotice(String id) {
