@@ -52,6 +52,8 @@ public class NoticeManager {
 
 		Notice notice = new Notice(title, description, pUser, mails,send);
 		notice.setId(new ObjectId());
+		
+		
 		dataMap.putIfAbsent("id_notice", notice.getId().toString());
 		if (notice.isSend()) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
@@ -63,30 +65,32 @@ public class NoticeManager {
 				}
 				tokens.add(user.getUniqueMobileToken());
 			}
-			MulticastMessage notification = MulticastMessage.builder()
-
-					// Data needed by the app
-					.putAllData(dataMap)
-					
-					.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
-									  .setPriority(AndroidConfig.Priority.NORMAL)
-									  .setNotification(AndroidNotification.builder().setTitle(title).setBody(description).build())
-									  .build())
-					.addAllTokens(tokens).build();
-			BatchResponse response;
-			try {
-				response = FirebaseMessaging.getInstance().sendMulticast(notification);
-				// See the BatchResponse reference documentation
-				// for the contents of response.
-				System.out.println(response.getSuccessCount() + " messages were sent successfully");
-				System.out.println("\nand " + response.getFailureCount() + " messages were not send.");
-			} catch (FirebaseMessagingException e) {
-				e.printStackTrace();
+			if(!tokens.isEmpty()) {
+				MulticastMessage notification = MulticastMessage.builder()
+						
+						// Data needed by the app
+						.putAllData(dataMap)
+						
+						.setAndroidConfig(AndroidConfig.builder().setTtl(DAYINMILLISECONDS * 7) // 1 week in milliseconds
+								.setPriority(AndroidConfig.Priority.NORMAL)
+								.setNotification(AndroidNotification.builder().setTitle(title).setBody(description).build())
+								.build())
+						.addAllTokens(tokens).build();
+				BatchResponse response;
+				try {
+					response = FirebaseMessaging.getInstance().sendMulticast(notification);
+					// See the BatchResponse reference documentation
+					// for the contents of response.
+					System.out.println(response.getSuccessCount() + " messages were sent successfully");
+					System.out.println("\nand " + response.getFailureCount() + " messages were not send.");
+				} catch (FirebaseMessagingException e) {
+					e.printStackTrace();
+				}
+				// [END send_multicast]
 			}
-			// [END send_multicast]
 		}
+		
 		nRepo.createNotice(notice);
-
 	}
 
 	public void markAsRead(String mail, ObjectId idNotice) {
