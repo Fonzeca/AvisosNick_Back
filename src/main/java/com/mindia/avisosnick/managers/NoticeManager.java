@@ -161,6 +161,7 @@ public class NoticeManager {
 
 	public PojoNotice getNotice(String id) {
 		Notice n = nRepo.getNoticeById(new ObjectId(id));
+		
 		PojoNotice pojo = new PojoNotice();
 		pojo.setId(n.getId().toString());
 		pojo.setTitle(n.getTitle());
