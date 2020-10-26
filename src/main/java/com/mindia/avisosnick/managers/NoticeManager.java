@@ -90,14 +90,10 @@ public class NoticeManager {
 
 	public void markAsRead(String mail, ObjectId idNotice) {
 		Notice notice = nRepo.getNoticeById(idNotice);
-		for (String lector : notice.getReadedByUsers()) {
-			if(lector.equals(mail)) {
-				break;
-			}
+		if(!notice.getReadedByUsers().contains(mail)) {
 			notice.readedByUser(mail);
 			nRepo.createNotice(notice);
 		}
-		
 
 	}
 
@@ -157,12 +153,9 @@ public class NoticeManager {
 		return noticesForUser;
 	}
 	private boolean alreadyReaded(Notice notice, String userMail) {
-		for (String reader : notice.getReadedByUsers()) {
-			if(reader.equals(userMail)) {
-				return true;
-			}
-		}
-		return false;
+		if(notice.getReadedByUsers().contains(userMail)) {
+			return true;
+		}return false;
 	}
 
 	public PojoNotice getNotice(String id) {
