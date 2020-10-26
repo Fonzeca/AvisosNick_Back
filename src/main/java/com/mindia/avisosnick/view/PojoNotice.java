@@ -30,6 +30,8 @@ public class PojoNotice {
     private String creationDate;
     @JsonProperty("mails")
     private List<String> mails;
+    @JsonProperty("readed")
+    private boolean readed;
 
     @JsonProperty("id")
     public String getId() {
@@ -89,6 +91,16 @@ public class PojoNotice {
     @JsonProperty("mails")
 	public void setMails(List<String> mails) {
 		this.mails = mails;
+	}
+
+    @JsonProperty("readed")
+	public boolean isReaded() {
+		return readed;
+	}
+
+    @JsonProperty("readed")
+	public void setReaded(boolean readed) {
+		this.readed = readed;
 	}
 
 }
