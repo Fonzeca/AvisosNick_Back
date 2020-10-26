@@ -66,6 +66,10 @@ public class UserManager {
 
 		user.setEmail(vUser.getEmail());
 		user.setFullName(vUser.getFullName());
+		
+		if(vUser.getFullName() == null || vUser.getFullName().isEmpty()) {
+			user.setFullName(vUser.getEmail());
+		}
 
 		// TODO: hashear password
 		user.setPasswordHash(vUser.getPassword());
@@ -185,6 +189,7 @@ public class UserManager {
 					user = new User();
 
 					user.setEmail(email);
+					user.setFullName(email);
 					user.setRoles(Arrays.asList(Constants.ROLE_USER));
 
 					AuthUser authUser = new AuthUser();
@@ -289,6 +294,7 @@ public class UserManager {
 			user = new User();
 
 			user.setEmail(userEmail);
+			user.setFullName(userEmail);
 			user.setRoles(Arrays.asList(Constants.ROLE_USER));
 
 			AuthUser authUser = new AuthUser();
