@@ -18,7 +18,7 @@ public class Notice {
 	private ObjectId id;
 	private String title, description;
 	private PojoUser author;
-	private List <String> notifiedUsers, readedByUsers;
+	private List <String> notifiedUsers = new ArrayList<String>(), readedByUsers = new ArrayList<String>();
 	private Date creationDate;
 	private boolean active, sendNotification;
 	

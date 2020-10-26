@@ -20,7 +20,7 @@ public class User {
     private List<String> userType = new ArrayList<String>();
     private String fullName;
     private AuthUser auth;
-    private boolean active;
+    private boolean active = true;
     
 	public ObjectId getId() {
 		return id;

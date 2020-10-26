@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserType {
 	@Id
 	private ObjectId id;
-	private String code;
-	private String description;
+	private String code = "";
+	private String description = "";
 	private boolean active;
 	
 	
