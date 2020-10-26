@@ -136,6 +136,7 @@ public class NoticeManager {
 					pojo.setTitle(notice.getTitle());
 					pojo.setDescription(notice.getDescription());
 					pojo.setAuthor(notice.getAuthor().getFullName());
+					pojo.setMails(notice.getNotifiedUsers());
 
 					Date dateNotice = notice.getCreationDate();
 					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
