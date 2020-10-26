@@ -159,20 +159,32 @@ public class NoticeManager {
 		}return false;
 	}
 
-	public PojoNotice getNotice(String id) {
-		Notice n = nRepo.getNoticeById(new ObjectId(id));
+	public PojoNotice getNotice(String id, String userMail) {
+		Notice notice = nRepo.getNoticeById(new ObjectId(id));
 		
 		PojoNotice pojo = new PojoNotice();
-		pojo.setId(n.getId().toString());
-		pojo.setTitle(n.getTitle());
-		pojo.setDescription(n.getDescription());
-		pojo.setAuthor(n.getAuthor().getFullName());
-		
-		Date dateNotice = n.getCreationDate();
+		pojo.setId(notice.getId().toString());
+		pojo.setTitle(notice.getTitle());
+		pojo.setDescription(notice.getDescription());
+		pojo.setAuthor(notice.getAuthor().getFullName());
+		pojo.setMails(notice.getNotifiedUsers());
+
+		Date dateNotice = notice.getCreationDate();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
 
 		pojo.setCreationDate(sdf.format(dateNotice));
+		
+		//TODO: refactorizar DIEGO!!!!
+		if(notice.getNotifiedUsers().contains(userMail)) {
+			if(alreadyReaded(notice, userMail)) {
+				pojo.setReaded(true);
+			}else {
+				pojo.setReaded(false);
+			}
+		}else {
+			pojo.setReaded(true);
+		}
 
 		return pojo;
 	}

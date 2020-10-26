@@ -93,8 +93,8 @@ public class NoticeController {
 
 	@PreAuthorize("hasRole('" + Constants.ROLE_ADMIN + "') OR hasRole('" + Constants.ROLE_USER + "')")
 	@GetMapping("/get")
-	public PojoNotice getNoticeById(@RequestParam String id) {
-		return manager.getNotice(id);
+	public PojoNotice getNoticeById(@RequestParam String id, Authentication authentication) {
+		return manager.getNotice(id, (String)authentication.getPrincipal());
 	}
 
 	@PostConstruct
