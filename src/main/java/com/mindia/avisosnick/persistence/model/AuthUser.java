@@ -4,9 +4,9 @@ import org.springframework.data.annotation.TypeAlias;
 
 @TypeAlias("AuthUser")
 public class AuthUser {
-	private String provider;
-	private String lastIdToken;
-	private String userId;
+	private String provider = "";
+	private String lastIdToken = "";
+	private String userId = "";
 	private long expirationLastIdToken;
 	
 	public String getProvider() {

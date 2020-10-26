@@ -1,5 +1,6 @@
 package com.mindia.avisosnick.persistence.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -15,8 +16,8 @@ public class User {
     private String email;
     private String passwordHash;
     private String uniqueMobileToken;
-    private List<String> roles;
-    private List<String> userType;
+    private List<String> roles = new ArrayList<String>();
+    private List<String> userType = new ArrayList<String>();
     private String fullName;
     private AuthUser auth;
     private boolean active;
