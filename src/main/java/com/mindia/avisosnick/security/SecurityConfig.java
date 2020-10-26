@@ -28,7 +28,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private static int secondsUntilExpires = 3600;
+	private static int secondsUntilExpires = 10;
 	public static String secretKey = "huffm4an123";
 
 	@Override
