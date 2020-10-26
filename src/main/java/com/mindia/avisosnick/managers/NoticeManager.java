@@ -47,11 +47,12 @@ public class NoticeManager {
 				for (PojoUser user : uManager.getUsersByType(string)) {
 					mails.add(user.getMail());
 				}
-				;
 			}
 		}
 
 		Notice notice = new Notice(title, description, pUser, mails,send);
+		notice.setId(new ObjectId());
+		dataMap.putIfAbsent("id_notice", notice.getId().toString());
 		if (notice.isSend()) {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
