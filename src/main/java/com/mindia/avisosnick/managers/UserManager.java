@@ -349,10 +349,17 @@ public class UserManager {
 	 * @param token
 	 */
 	public void setToken(String mail, String token) {
-		User user = repo.getUserByEmail(mail);
-		user.setUniqueMobileToken(token);
-		repo.updateUser(user);
+		User usuario = repo.getUserByEmail(mail);
+		usuario.setUniqueMobileToken(token);
+		repo.updateUser(usuario);
+		for (User user : repo.getUsers()) {
+			if(user.getUniqueMobileToken().equals(token)||!user.getEmail().equals(mail)) {
+				user.setUniqueMobileToken(null);
+				 
+			}
+		}
 	}
+
 
 	/**
 	 * Lista todos los usuarios encontrados en la db.
