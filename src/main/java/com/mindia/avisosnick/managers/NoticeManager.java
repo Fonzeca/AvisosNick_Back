@@ -11,9 +11,7 @@ import java.util.TimeZone;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidNotification;
@@ -59,11 +57,14 @@ public class NoticeManager {
 			List<User> usersToSend = uManager.getAllUsersByEmails(mails);
 			List<String> tokens = new ArrayList<String>();
 			for (User user : usersToSend) {
-				if (user.getUniqueMobileToken().equals(null)) {
-					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario " + user.getFullName()
-							+ " no posee asignado un token al cual enviar notificaciones.");
+//				No importa si no tienen asignado un mobile token
+//				if (user.getUniqueMobileToken().equals(null)) {
+//					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario " + user.getFullName()
+//							+ " no posee asignado un token al cual enviar notificaciones.");
+//				}
+				if(user.getUniqueMobileToken() != null && !user.getUniqueMobileToken().isEmpty()) {
+					tokens.add(user.getUniqueMobileToken());
 				}
-				tokens.add(user.getUniqueMobileToken());
 			}
 			if(!tokens.isEmpty()) {
 				MulticastMessage notification = MulticastMessage.builder()
